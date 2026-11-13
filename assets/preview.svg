@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="460" viewBox="0 0 960 460" role="img" aria-labelledby="title desc">
+ <title id="title">Codex Progress Bubble</title><desc id="desc">Ilustração de um cartão escuro de acompanhamento com barra em 65% e uma bolinha com anel de progresso.</desc>
+ <defs><radialGradient id="bg"><stop stop-color="#263356"/><stop offset="1" stop-color="#0a101d"/></radialGradient></defs>
+ <rect width="960" height="460" rx="24" fill="url(#bg)"/>
+ <g font-family="Segoe UI,Arial,sans-serif"><text x="64" y="110" fill="#8b9dff" font-size="13" letter-spacing="3">CODEX PROGRESS BUBBLE</text>
+ <text x="64" y="164" fill="#f1f4ff" font-size="34" font-weight="700">Seu trabalho.</text><text x="64" y="207" fill="#f1f4ff" font-size="34" font-weight="700">Sempre à vista.</text>
+ <text x="64" y="253" fill="#a2afc4" font-size="16">Status local · HTML · Windows</text><text x="64" y="281" fill="#a2afc4" font-size="16">Sem servidor ou dependências de pip.</text>
+ <rect x="515" y="45" width="374" height="276" rx="24" fill="#080d17" opacity=".7"/>
+ <rect x="510" y="39" width="374" height="276" rx="24" fill="#101827" stroke="#2b374d"/>
+ <text x="536" y="72" fill="#8897ae" font-size="11" letter-spacing="2">ACOMPANHAMENTO</text><text x="854" y="72" fill="#8897ae" font-size="20">×</text>
+ <text x="536" y="109" fill="#f1f4ff" font-size="21" font-weight="700">Preparando relatório</text>
+ <circle cx="541" cy="139" r="4" fill="#8b9dff"/><text x="554" y="144" fill="#8b9dff" font-size="13">Em andamento</text>
+ <text x="536" y="192" fill="#f1f4ff" font-size="38" font-weight="700">65%</text><text x="631" y="189" fill="#8897ae" font-size="12">progresso estimado</text>
+ <rect x="536" y="211" width="320" height="8" rx="4" fill="#263149"/><rect x="536" y="211" width="208" height="8" rx="4" fill="#8b9dff"/>
+ <text x="536" y="248" fill="#c5cfdf" font-size="13">Revisando o conteúdo do relatório.</text><text x="536" y="288" fill="#8897ae" font-size="11">14:32:08</text><text x="748" y="288" fill="#8b9dff" font-size="12">Abrir detalhes ↗</text>
+ <circle cx="839" cy="377" r="44" fill="#101827" stroke="#27334a" stroke-width="5"/>
+ <circle cx="839" cy="377" r="40" fill="none" stroke="#8b9dff" stroke-width="5" stroke-dasharray="163 252" transform="rotate(-90 839 377)" stroke-linecap="round"/>
+ <text x="839" y="384" text-anchor="middle" fill="#f1f4ff" font-size="21" font-weight="700">65%</text></g>
+</svg>
