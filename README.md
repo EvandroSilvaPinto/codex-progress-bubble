@@ -26,9 +26,9 @@ A janela usa APIs do Windows. Em Linux, macOS e ambientes sem desktop, use o aco
 
 ## Instalar no Codex
 
-Depois que este repositório estiver publicado, envie ao Codex o link GitHub da pasta `skills/acompanhar-demandas-longas` e peça:
+Envie este pedido ao Codex:
 
-> Use $skill-installer para instalar a skill deste link.
+> Use $skill-installer para instalar https://github.com/EvandroSilvaPinto/codex-progress-bubble/tree/main/skills/acompanhar-demandas-longas
 
 Para instalar a partir de um clone, copie **a pasta inteira** `skills/acompanhar-demandas-longas` para o diretório de skills do usuário, como `~/.agents/skills/`. Para uso apenas em um projeto, copie-a para `.agents/skills/` na raiz desse projeto. Evite instalar a mesma skill em vários lugares. Se ela não aparecer, reinicie o Codex.
 
