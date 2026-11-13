@@ -21,7 +21,7 @@ class Bubble:
         self.down = None
         self.moved = False
         self.root = tk.Tk()
-        self.root.title('Acompanhamento Codex')
+        self.root.title('Acompanhamento da demanda')
         self.root.attributes('-topmost', True)
         self.root.configure(bg=TRANSPARENT)
         self.root.attributes('-transparentcolor', TRANSPARENT)

@@ -5,11 +5,23 @@ description: Use when a requested task is estimated to take more than 30 seconds
 
 # Acompanhar demandas longas
 
+Skill compartilhada para Codex, Claude Code e Google Antigravity. O formato principal usa apenas `name` e `description`; `agents/openai.yaml` contém metadados opcionais do Codex. Os scripts são os mesmos nos três agentes.
+
+## Adaptação ao agente
+
+- Codex: invocação explícita `$acompanhar-demandas-longas`; instalação pessoal em `~/.agents/skills/` ou de projeto em `.agents/skills/`.
+- Claude Code local: invocação `/acompanhar-demandas-longas`; instalação pessoal em `~/.claude/skills/` ou de projeto em `.claude/skills/`. Quando disponível, `${CLAUDE_SKILL_DIR}` identifica a pasta desta skill; resolver o valor antes de construir o comando para o shell usado.
+- Antigravity: invocação `/acompanhar-demandas-longas`; instalação global em `~/.gemini/config/skills/` ou de projeto em `.agents/skills/`. Localizar esta pasta pela skill carregada, sem presumir caminhos do Codex.
+
+Nos três, resolver os scripts a partir da pasta que contém este SKILL.md e usar o terminal disponível, com argumentos corretamente delimitados. Usar `python`, `python3` ou `py -3` conforme o interpretador disponível. Compartilhar o link no canal normal de atualização de progresso do agente; não depender de um canal chamado commentary.
+
+Executar `--open` somente em Python nativo do Windows com desktop acessível. Em WSL, contêiner ou execução remota, gerar HTML/JSON e explicar que a bolinha não aparece no desktop local. A instalação não amplia permissões: respeitar as autorizações do agente. Claude Code local é o alvo desta adaptação; ela não instala uma extensão no chat web do Claude nem sincroniza skills para Cowork.
+
 Comportamento padrão desta skill: toda demanda com entrega estimada acima de 30 segundos deve ter uma página HTML de acompanhamento, com pelo menos uma barra de progresso, e uma bolinha flutuante no desktop Windows. Ao clicar na bolinha, mostrar um cartão com status e barra. Aplicar automaticamente, sem exigir invocação explícita ou confirmação. Continuar o trabalho principal até a entrega.
 
 ## Ativação
 
-- Se a estimativa inicial superar 30 segundos, criar a página antes do trabalho demorado e compartilhar seu link em comentário.
+- Se a estimativa inicial superar 30 segundos, criar a página antes do trabalho demorado e compartilhar seu link em uma atualização de progresso.
 - Se a tarefa inicialmente parecer curta e ultrapassar 30 segundos, criar a página assim que perceber isso.
 - Se o usuário explicitamente dispensar o acompanhamento, respeitar sua instrução.
 

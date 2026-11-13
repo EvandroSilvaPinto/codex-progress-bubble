@@ -1,8 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="960" height="460" viewBox="0 0 960 460" role="img" aria-labelledby="title desc">
- <title id="title">Codex Progress Bubble</title><desc id="desc">Ilustração de um cartão escuro de acompanhamento com barra em 65% e uma bolinha com anel de progresso.</desc>
+ <title id="title">Progress Bubble para Codex, Claude Code e Antigravity</title><desc id="desc">Ilustração de um cartão escuro de acompanhamento com barra em 65% e uma bolinha com anel de progresso.</desc>
  <defs><radialGradient id="bg"><stop stop-color="#263356"/><stop offset="1" stop-color="#0a101d"/></radialGradient></defs>
  <rect width="960" height="460" rx="24" fill="url(#bg)"/>
- <g font-family="Segoe UI,Arial,sans-serif"><text x="64" y="110" fill="#8b9dff" font-size="13" letter-spacing="3">CODEX PROGRESS BUBBLE</text>
+ <g font-family="Segoe UI,Arial,sans-serif"><text x="64" y="110" fill="#8b9dff" font-size="13" letter-spacing="3">AGENT PROGRESS BUBBLE</text>
  <text x="64" y="164" fill="#f1f4ff" font-size="34" font-weight="700">Seu trabalho.</text><text x="64" y="207" fill="#f1f4ff" font-size="34" font-weight="700">Sempre à vista.</text>
  <text x="64" y="253" fill="#a2afc4" font-size="16">Status local · HTML · Windows</text><text x="64" y="281" fill="#a2afc4" font-size="16">Sem servidor ou dependências de pip.</text>
  <rect x="515" y="45" width="374" height="276" rx="24" fill="#080d17" opacity=".7"/>
