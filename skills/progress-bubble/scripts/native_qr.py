@@ -4,6 +4,7 @@ import struct
 import zlib
 import tkinter as tk
 from qrcode import QRCode,ERROR_CORRECT_M
+from transitions import enter_view
 
 
 @lru_cache(maxsize=8)
@@ -27,11 +28,11 @@ def qr_png(url,available):
 
 
 def show_qr(app,url):
-    app.mobile_url=url;app.colors_open=False;app.expanded=True;app.resize()
+    app.mobile_url=url;app.colors_open=False;app.expanded=True;enter_view(app,app.resize)
 
 
 def hide_qr(app):
-    app.mobile_url=None;app.resize()
+    app.mobile_url=None;enter_view(app,app.resize)
 
 
 def copy_qr(app):

@@ -17,6 +17,7 @@ from sizing import load_sizes, save_size, geometry, show_size_menu
 from placement import PositionSlot, initial_position
 from progress import displayed_progress
 from window_style import configure_window
+from transitions import PanelMotion,animations_enabled,enter_view,exit_view
 from sharing import share_task
 from native_qr import draw_qr,hide_qr,copy_qr
 
@@ -65,6 +66,7 @@ class Bubble:
         self.hwnd = configure_window(self.root)
         self.canvas = tk.Canvas(self.root, bg=TRANSPARENT, highlightthickness=0)
         self.canvas.pack(fill='both', expand=True)
+        self.motion=PanelMotion(self.root,self.canvas,animations_enabled())
         self.tooltip = Tooltip(self.root)
         self.canvas.tag_bind('bubble', '<ButtonPress-1>', self.press)
         self.canvas.bind('<B1-Motion>', self.drag)
@@ -105,6 +107,8 @@ class Bubble:
                     font=('Segoe UI',-max(1,round(size*self.layout['card']*96/72)),'bold' if bold else 'normal'), **kw)
 
     def draw(self):
+        motion=getattr(self,'motion',None)
+        if motion is not None:motion.cancel()
         self.tooltip.hide()
         c = self.canvas
         c.delete('all')
@@ -157,6 +161,7 @@ class Bubble:
         card_scale = self.layout['card']
         c.scale('all',0,0,card_scale,card_scale)
         c.move('all',self.layout['card_x'],0)
+        c.addtag_all('panel')
         bs = self.layout['bubble']
         bx, by = self.layout['bubble_x'], self.layout['bubble_y']
         self.ring_image = tk.PhotoImage(data=ring_png(p,t['ring'] if status=='Em andamento' else color,
@@ -169,12 +174,14 @@ class Bubble:
     def close_card(self):
         self.down = None
         self.expanded = False
-        if getattr(self,'mobile_url',None):
-            self.mobile_url=None;self.resize()
-        elif self.colors_open:
+        if self.colors_open:
+            self.mobile_url=None
             self.set_color_panel(False)
+        elif getattr(self,'mobile_url',None):
+            self.mobile_url=None
+            exit_view(self,self.resize)
         else:
-            self.draw()
+            exit_view(self,self.draw)
 
     def draw_bubble_close(self):
         c = self.canvas
@@ -233,10 +240,10 @@ class Bubble:
 
     def release(self, event):
         if self.down and not self.moved:
-            self.expanded = not self.expanded
-            if not self.expanded and self.colors_open:
-                self.set_color_panel(False)
-            self.draw()
+            if self.expanded:self.close_card()
+            else:
+                self.expanded=True
+                enter_view(self,self.draw)
         self.down = None
 
     def open_html(self):

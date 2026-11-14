@@ -38,7 +38,7 @@ Asked your agent to work on something while you focus elsewhere? **Progress Bubb
 
 ## 📱 Follow a task on your phone
 
-Open **Mobile** in the desktop progress card, confirm sharing, then scan the QR code shown **inside the same card**. The QR replaces the other card information without increasing the card size. No browser opens on the computer. **Back** returns to progress, and **Copy link** copies the read-only URL. The desktop QR is generated locally with a bundled encoder; no extra pip package, Node runtime or QR service is required. The web viewer also generates its QR locally. The viewer adapts to your screen and detects Portuguese or English. Its footer omits the explanatory sentence about estimated progress.
+Open **Mobile** in the desktop progress card, confirm sharing, then scan the QR code shown **inside the same card**. The QR replaces the other card information without increasing the card size. Short 160 ms transitions soften opening, closing and switching between progress and QR; they keep the bubble stationary and the QR sharp. Windows reduced-motion preferences are respected. No browser opens on the computer. **Back** returns to progress, and **Copy link** copies the read-only URL. The desktop QR is generated locally with a bundled encoder; no extra pip package, Node runtime or QR service is required. The web viewer also generates its QR locally. The viewer adapts to your screen and detects Portuguese or English. Its footer omits the explanatory sentence about estimated progress.
 
 **Local by default.** Sharing is opt-in for each task. The hosted viewer uses Cloudflare Workers Free and D1 Free; end users need no account. Anyone holding a private link can read that task until it expires, so treat the link and QR as private.
 
@@ -287,7 +287,7 @@ Scripts are resolved relative to the installed skill folder, without fixed perso
 
 ## 🛠️ Built to share and improve
 
-The mobile feature is available in `main` and includes an independent security review and regression checks for session replay after cleanup, completion/cancellation races, delayed local writes, lost responses, malformed transports and switching private links in one tab. The API and viewer are deployed together; desktop-only usage remains local. The hosted deployment was verified on Workers Free ($0), including live isolated-session and revocation checks. Local validation passes 75 Python tests and 21 Node tests. Physical phone-camera scanning remains a device acceptance check.
+The mobile feature is available in `main` and includes an independent security review and regression checks for session replay after cleanup, completion/cancellation races, delayed local writes, lost responses, malformed transports and switching private links in one tab. The API and viewer are deployed together; desktop-only usage remains local. The hosted deployment was verified on Workers Free ($0), including live isolated-session and revocation checks. Local validation passes 79 Python tests and 21 Node tests. Physical phone-camera scanning remains a device acceptance check.
 
 
 Every project change must include a README update in the same delivery, as recorded in `AGENTS.md`. The optional GIF generator, `tools/render_demo.py`, uses Pillow only to create the image; the skill itself has no pip dependencies.
