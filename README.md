@@ -36,6 +36,10 @@ Asked your agent to work on something while you focus elsewhere? **Progress Bubb
 
 > **Before installing:** the floating bubble requires **native Windows + Python 3.10 or later with Tkinter**. On macOS, Linux, WSL and environments without a desktop, use the HTML progress page.
 
+## 📱 Mobile sharing development
+
+The `progress-bubble-mobile` branch adds optional, private, temporary web tracking and local QR sharing. The approved design and implementation plan are in `docs/superpowers/`. Hosting targets Cloudflare Workers Free and D1 Free, without changing desktop-only behavior or adding user accounts. This feature is under implementation; no production endpoint is configured yet.
+
 ## 🌐 Automatic language detection
 
 The interface detects the system language when it starts:
