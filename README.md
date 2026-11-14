@@ -18,7 +18,9 @@ Acompanhamento automático para seu agente, com uma bolinha no desktop, progress
 
 </div>
 
-![Ilustração do Progress Bubble: cartão de status e bolinha com anel de progresso](assets/preview.svg)
+![Demonstração animada do Progress Bubble: bolinha, acompanhamento, cinco cores e conclusão](assets/demo.gif)
+
+<p align="center"><sub>Demonstração ilustrativa. Progresso e tempo restante são estimados pelo agente.</sub></p>
 
 ## ✨ Menos troca de janelas. Mais clareza.
 
