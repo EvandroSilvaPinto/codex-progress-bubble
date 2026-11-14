@@ -1,5 +1,7 @@
 <div align="center">
 
+<img src="skills/progress-bubble/assets/logo.png" alt="Logo Progress Bubble: anel verde" width="112" height="112">
+
 # 🫧 Progress Bubble
 
 ### Seu agente trabalha. Você acompanha.
