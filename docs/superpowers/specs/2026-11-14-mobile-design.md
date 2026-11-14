@@ -75,3 +75,9 @@ Builder chooses small internal libraries, precise per-request/active-session lim
 ## Approval status
 
 Approved by the user on November 14, 2026 (America/Cuiaba): "Aprovar e implementar". Independent builder check: nothing important left. Implementation and free-tier Cloudflare configuration are authorized; any new security-sensitive access grant remains subject to its own action-time approval.
+
+## Implementation security refinements
+
+Capabilities are generated cryptographically by the publishing client and persisted before the first POST, making creation retries idempotent even if the response is lost. The 32-hex creation identity combines a millisecond timestamp and 80 random bits; independent 256-bit capabilities enforce access. New identity acceptance is limited to five minutes of clock skew, including an atomic database-time check. Revocation tombstones outlive this acceptance window (at least ten minutes) and cancellation is atomic with delayed creation. This prevents a cleaned link from being re-created with an attacker's writer key.
+
+The viewer preserves the user's earlier request to omit a last-update clock. It instead labels a publisher snapshot stale after 90 seconds and shows the agent-reported percentage separately from its visual estimate. Completed sessions continue visible-only polling until expiry/revocation so an explicit revocation can clear an already-open viewer; the explicit viewer lifecycle requirement takes precedence over the earlier generic completed-page quota note.

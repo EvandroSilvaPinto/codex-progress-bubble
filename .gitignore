@@ -6,3 +6,6 @@ graphify-out/
 *.tmp
 .env
 .env.*
+node_modules/
+.wrangler/
+*.web-secret.json

@@ -5,6 +5,13 @@ import locale
 import os
 
 EN = {
+    'Celular':'Mobile', 'Acompanhar em outro dispositivo':'Follow on another device',
+    'Compartilhar acompanhamento':'Share progress',
+    'Enviar somente título, mensagem e progresso para gerar um link temporário? Quem tiver o link poderá visualizar esta demanda.':
+    'Send only the title, message and progress to create a temporary link? Anyone with the link can view this task.',
+    'Serviço web ainda não configurado.':'Web service is not configured yet.',
+    'Não foi possível sincronizar. O acompanhamento local continua disponível.':
+    'Could not synchronize. Local progress remains available.',
     'ACOMPANHAMENTO':'PROGRESS', 'Acompanhamento da demanda':'Task progress',
     'Sua demanda':'Your task', 'Aguardando atualização':'Waiting for an update',
     'Em andamento':'In progress', 'Concluído':'Completed', 'Falha':'Failed',

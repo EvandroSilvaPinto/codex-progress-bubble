@@ -108,9 +108,19 @@ Se houver bloqueio ou informação pendente, manter o percentual realista e regi
 
 Ao concluir, salvar 100%, status Concluído e uma frase de resultado; incluir links para os entregáveis quando disponíveis. Verificar o arquivo salvo e manter o link na resposta final se útil. A página não executa trabalho em segundo plano após o encerramento da conversa.
 
+## Acompanhamento opcional em outro dispositivo
+
+Manter o acompanhamento local como padrão. Não enviar dados à nuvem automaticamente. Quando o usuário pedir acesso pelo celular/web/QR, usar `--web-url` com o serviço configurado em `web-service.json` ou com uma origem HTTPS confirmada do usuário. O botão `Celular` / `Mobile` no cartão pede confirmação e abre a página com QR gerado localmente. Também funciona para agentes em nuvem com Python e acesso HTTPS; não abre uma bolinha no celular.
+
+Na primeira atualização compartilhada, passar `--web-url https://<origem-confirmada>` junto dos argumentos habituais. As próximas atualizações do MESMO arquivo reutilizam o vínculo, sem repetir o argumento. Compartilhar somente a URL de leitura retornada em `Web:`. A chave de escrita fica em configuração privada do usuário; nunca ler, imprimir ou anexar seu conteúdo. Não compartilhar arquivos `*.web-secret.json`. O HTML/JSON local pode conter o link de leitura, que deve ser tratado como privado.
+
+Explicar que qualquer pessoa com o link/QR pode ler aquela demanda até expirar: no máximo 24 horas ou uma hora depois da primeira conclusão. Não enviar credenciais, conteúdo da conversa, caminhos locais ou dados sensíveis nos títulos/mensagens. Somente título, mensagem, status, percentual, idioma e previsão são enviados. O serviço não exige cadastro. O leitor consulta a cada 15 segundos quando visível; a animação local não comprova novos avanços.
+
+Para encerrar somente o compartilhamento: `python "<diretorio-absoluto-desta-skill>/scripts/status.py" --output "<html-desta-demanda>" --stop-sharing`. Se houver falha de rede, informar revogação pendente; as próximas atualizações tentam novamente. Não afirmar revogação antes da confirmação. Falhas na nuvem preservam o acompanhamento local. Expiração bloqueia leitura no servidor e a limpeza é horária; backups de recuperação D1 Free podem reter dados por sete dias.
+
 ## Limites
 
-Criar somente o acompanhamento necessário. Não publicar, abrir portas ou instalar serviços para isso. Não expor credenciais, dados sensíveis ou detalhes internos desnecessários. O HTML complementa as atualizações da conversa.
+Criar somente o acompanhamento necessário. Não publicar, abrir portas ou instalar serviços para o modo local. Compartilhamento remoto exige o pedido explícito descrito acima. Não expor credenciais, dados sensíveis ou detalhes internos desnecessários. O HTML complementa as atualizações da conversa.
 
 ## Manutenção e atualização da própria skill
 

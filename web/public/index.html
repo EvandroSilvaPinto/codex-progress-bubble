@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="referrer" content="no-referrer"><title>Progress Bubble</title><link rel="stylesheet" href="/style.css"><script type="module" src="/app.js"></script></head>
+<body><main>
+  <header><span class="logo" aria-hidden="true"></span><strong>Progress Bubble</strong><span class="cloud" id="cloud">Cloud tracking</span></header>
+  <section class="intro"><p class="eyebrow" id="eyebrow">YOUR TASK, IN VIEW</p><h1 id="title">Open your private task link</h1><p id="connection" role="status">No account needed. Each link opens just one task.</p></section>
+  <section class="task" id="task" hidden>
+    <p class="state" id="state"></p>
+    <div class="value"><strong id="percent">0%</strong><span id="estimated">estimated progress</span></div>
+    <progress id="bar" max="100" value="0" aria-label="Estimated progress"></progress>
+    <p class="notice" id="reported"></p><p id="message"></p><div class="meta"><span id="eta"></span><span id="expires"></span></div>
+    <div class="actions"><button id="qr-button" type="button">Show QR code</button><button id="copy" type="button">Copy private link</button></div>
+  </section>
+  <section class="share" id="share" hidden><h2 id="share-title">Continue on another device</h2><canvas id="qr" role="img" aria-label="QR code for this task's private read-only link"></canvas><p id="share-help">Scan with your phone. Anyone with this link can view this task until it expires.</p><button id="close-qr" type="button">Close</button></section>
+  <p class="notice" id="notice">Private session links · no permanent task history</p><footer id="footer">Progress is an estimate. Only confirmed delivery reaches 100%.</footer>
+</main></body></html>

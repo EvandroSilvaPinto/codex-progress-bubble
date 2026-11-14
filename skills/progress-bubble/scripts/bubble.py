@@ -17,6 +17,7 @@ from sizing import load_sizes, save_size, geometry, show_size_menu
 from placement import PositionSlot, initial_position
 from progress import displayed_progress
 from window_style import configure_window
+from sharing import share_task
 
 TRANSPARENT = '#010203'
 
@@ -75,8 +76,9 @@ class Bubble:
         self.canvas.tag_bind('colors', '<ButtonRelease-1>', lambda e: self.edit_colors())
         self.canvas.tag_bind('reset-colors', '<ButtonRelease-1>', lambda e: self.reset_theme())
         self.canvas.tag_bind('sizes','<ButtonRelease-1>',lambda e:show_size_menu(self,e))
+        self.canvas.tag_bind('mobile','<ButtonRelease-1>',lambda e:share_task(self))
         self.canvas.bind('<Button-3>',lambda e:show_size_menu(self,e))
-        for tag in ('bubble', 'close', 'report','colors','reset-colors','sizes'):
+        for tag in ('bubble', 'close', 'report','colors','reset-colors','sizes','mobile'):
             self.canvas.tag_bind(tag, '<Enter>', lambda e: self.canvas.configure(cursor='hand2'))
             self.canvas.tag_bind(tag, '<Leave>', lambda e: self.canvas.configure(cursor=''))
         self.root.bind('<Escape>', lambda event: self.root.destroy())
@@ -127,6 +129,7 @@ class Bubble:
                 self.rounded(23,164,23+306*p/100,171,3,t['bar'] if status=='Em andamento' else color,'progress')
             self.text(23,185,self.data.get('message','')[:88],9,t['message'],width=302,translate=False)
             self.text(329,90,'Tamanhos',8,t['links'],anchor='ne',tags='sizes')
+            self.text(329,112,'Celular',8,t['links'],anchor='ne',tags='mobile')
             self.text(23,234,eta_text(self.data),9,t['links'])
             label = 'Abrir conversa  ↗' if self.data.get('conversation_url') else 'Abrir detalhes  ↗'
             self.text(329,234,label,9,t['links'],anchor='ne',tags='report')
