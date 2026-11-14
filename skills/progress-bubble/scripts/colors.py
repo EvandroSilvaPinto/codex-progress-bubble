@@ -71,6 +71,13 @@ def save_colors(values,path=None):
     os.replace(temp,target)
 
 
+def reset_colors(path=None):
+    """Restore every role, including colors derived from the five main groups."""
+    theme = dict(DEFAULTS)
+    save_colors(theme, path)
+    return theme
+
+
 def css(theme,status='Em andamento'):
     state = theme[{'Concluído':'complete','Falha':'error','Interrompido':'waiting',
                    'Aguardando informação':'waiting'}.get(status,'ongoing')]

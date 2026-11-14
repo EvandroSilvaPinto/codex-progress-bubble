@@ -56,7 +56,7 @@ class StatusTests(unittest.TestCase):
         eta = datetime.fromisoformat(self.state()['eta_at'])
         self.assertGreaterEqual((eta-before).total_seconds(),299)
         self.assertLess((eta-before).total_seconds(),310)
-        self.assertIn('Faltam cerca de 5 min',self.target.read_text(encoding='utf-8'))
+        self.assertIn('Faltam cerca de 5 min' if self.state().get('language')=='pt' else 'About 5 min left',self.target.read_text(encoding='utf-8'))
         self.assertEqual(self.run_status(50).returncode,0)
         self.assertEqual(self.state()['eta_at'],eta.isoformat())
         self.assertEqual(self.run_status(100,'Concluído').returncode,0)

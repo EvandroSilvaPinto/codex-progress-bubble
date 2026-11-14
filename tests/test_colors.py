@@ -7,6 +7,17 @@ SOURCE=Path(__file__).resolve().parents[1]/'skills/progress-bubble/scripts/color
 
 
 class ColorTests(unittest.TestCase):
+    def test_reset_restores_all_roles_and_persists_for_other_bubbles(self):
+        module = self.module()
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp)/'colors.json'
+            module.save_colors(dict.fromkeys(module.DEFAULTS,'#f3a9ce'),path)
+            result = module.reset_colors(path)
+            self.assertEqual(result,module.DEFAULTS)
+            self.assertEqual(module.load_colors(path),module.DEFAULTS)
+            result['ring'] = '#ffffff'
+            self.assertNotEqual(result['ring'],module.DEFAULTS['ring'])
+
     def module(self):
         self.assertTrue(SOURCE.exists(),'Falta configuração editável de cores')
         spec=importlib.util.spec_from_file_location('colors',SOURCE)

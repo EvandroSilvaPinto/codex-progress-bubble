@@ -1,44 +1,62 @@
 <div align="center">
 
-<img src="skills/progress-bubble/assets/logo.png" alt="Logo Progress Bubble: anel verde" width="112" height="112">
+<img src="skills/progress-bubble/assets/logo.png" alt="Progress Bubble logo: green ring" width="112" height="112">
 
 # 🫧 Progress Bubble
 
-### Seu agente trabalha. Você acompanha.
+### Your agent works. You stay in the loop.
 
-Acompanhamento automático para seu agente, com uma bolinha no desktop, progresso visível e tempo restante estimado.
+Automatic progress tracking for your AI agent, with a floating desktop bubble, visible progress and estimated time remaining.
 
 **Codex · Claude Code · Google Antigravity**
 
 [![Tests](https://github.com/EvandroSilvaPinto/progress-bubble/actions/workflows/tests.yml/badge.svg)](https://github.com/EvandroSilvaPinto/progress-bubble/actions/workflows/tests.yml)
 [![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-8b9dff?style=flat-square)](https://www.python.org/downloads/)
-[![Licença MIT](https://img.shields.io/badge/Licen%C3%A7a-MIT-58d9b0?style=flat-square)](LICENSE)
+[![MIT License](https://img.shields.io/badge/License-MIT-58d9b0?style=flat-square)](LICENSE)
 
-[Começar agora](#-comece-em-3-comandos) · [Como funciona](#-do-pedido-à-entrega) · [Agentes compatíveis](#-uma-skill-três-agentes)
+[Get started](#get-started) · [How it works](#how-it-works) · [Supported agents](#supported-agents)
 
 </div>
 
-![Demonstração animada do Progress Bubble: bolinha, acompanhamento, cinco cores e conclusão](assets/demo.gif)
+![Animated Progress Bubble demo: bubble, progress card, colors and completion](assets/demo.gif)
 
-<p align="center"><sub>Demonstração ilustrativa. Progresso e tempo restante são estimados pelo agente.</sub></p>
+<p align="center"><sub>Illustrative demonstration. Progress and time remaining are estimated by the agent.</sub></p>
 
-## ✨ Menos troca de janelas. Mais clareza.
+## ✨ Fewer window switches. More clarity.
 
-Pediu uma tarefa e foi fazer outra coisa? O **Progress Bubble** deixa o andamento visível sobre as outras janelas. Quando quiser mais contexto, basta clicar na bolinha.
+Asked your agent to work on something while you focus elsewhere? **Progress Bubble** keeps progress visible above your other windows. Click the bubble whenever you want more context.
 
-| À primeira vista | Ao clicar |
+| At a glance | On click |
 | --- | --- |
-| 🫧 Percentual e anel de progresso | 📋 Status, mensagem e tempo restante |
-| 🎨 Cores para conclusão, falha ou espera | 📊 Barra de progresso estimado |
-| 🖱️ Arraste para onde preferir | 🔗 Volte à conversa ou abra os detalhes em HTML |
+| 🫧 Percentage and progress ring | 📋 Status, message and time remaining |
+| 🎨 Completion, failure and waiting colors | 📊 Estimated progress bar |
+| 🖱️ Drag it wherever you prefer | 🔗 Return to the chat or open HTML details |
 
-**Local por padrão.** Os scripts não enviam telemetria nem precisam de servidor, conta adicional ou dependências de pip.
+**Local by default.** Runtime scripts send no telemetry and need no server, extra account or pip dependencies.
 
-> **Antes de instalar:** a bolinha precisa de **Windows nativo + Python 3.10 ou superior com Tkinter**. Em macOS, Linux, WSL e ambientes sem desktop, o acompanhamento pode ser usado em HTML.
+> **Before installing:** the floating bubble requires **native Windows + Python 3.10 or later with Tkinter**. On macOS, Linux, WSL and environments without a desktop, use the HTML progress page.
 
-## 🚀 Comece em 3 comandos
+## 🌐 Automatic language detection
 
-Com Git e Python instalados, abra o terminal:
+The interface detects the system language when it starts:
+
+| System language | Interface language |
+| --- | --- |
+| Portuguese, including Brazil and Portugal | Portuguese |
+| English | English |
+| Other or unidentified languages | English |
+
+Windows detection uses the **user's display language**, rather than regional date and number formats. On other systems, HTML generation follows `LC_ALL`, `LC_MESSAGES`, `LANGUAGE` or `LANG`, in that order, falling back to Python's locale.
+
+Buttons, menus, size labels, statuses, tooltips, notices and time remaining are translated. HTML pages use matching language attributes, accessible labels and countdown text. Task titles and messages preserve the text supplied by the agent. The native color chooser follows Windows.
+
+No translation downloads or configuration are required. After updating the skill or changing the system language, close old bubbles and open a new tracker. Technical status values in JSON and `--status`, and existing preference keys, remain compatible with earlier versions.
+
+<a id="get-started"></a>
+
+## 🚀 Get started in 3 commands
+
+With Git and Python installed, open a terminal:
 
 ```powershell
 git clone https://github.com/EvandroSilvaPinto/progress-bubble.git
@@ -46,9 +64,9 @@ cd progress-bubble
 python install.py --agent all
 ```
 
-Pronto: a skill é copiada para as pastas pessoais dos três agentes. Recarregue as skills ou inicie uma nova sessão. A instrução padrão é aplicá-la automaticamente em toda interação, sem precisar chamar um comando.
+The skill is copied into all three agents' personal skill folders. Reload skills or start a new agent session. Its instructions request automatic use in every interaction, without an explicit command.
 
-**Prefere instalar em apenas um?**
+**Only need one agent?** Choose its command:
 
 ```powershell
 python install.py --agent codex
@@ -56,145 +74,198 @@ python install.py --agent claude
 python install.py --agent antigravity
 ```
 
-Escolha a linha do seu agente. O instalador preserva instalações existentes: se o destino já existir, ele para e informa o caminho.
+The installer protects existing installations: it stops and displays the path if a destination already exists. Use the update commands below to replace it with a backup.
 
-## 🤝 Uma skill, três agentes
+<a id="supported-agents"></a>
 
-| Agente | Para chamar a skill | Instalação pessoal/global |
+## 🤝 One skill, three agents
+
+| Agent | Explicit invocation | Personal/global installation |
 | --- | --- | --- |
 | **Codex** | `$progress-bubble` | `~/.agents/skills/` |
 | **Claude Code** | `/progress-bubble` | `~/.claude/skills/` |
 | **Google Antigravity** | `/progress-bubble` | `~/.gemini/config/skills/` |
 
-O mesmo `SKILL.md` e os mesmos scripts atendem aos três. O suporte a Claude é para **Claude Code local**; esta instalação não adiciona uma extensão ao chat web do Claude nem sincroniza skills para Cowork.
+The same `SKILL.md` and runtime scripts serve all three. Claude support targets **local Claude Code**, not Claude's web chat or skill synchronization to Cowork.
 
 <details>
-<summary><strong>Instalar em um projeto, conferir os destinos ou usar o skill-installer</strong></summary>
+<summary><strong>Project installation, destination previews and skill-installer</strong></summary>
 
-Instalação apenas no projeto escolhido:
+Install only in a specific project:
 
 ```powershell
-python install.py --agent all --scope project --project-root "C:/caminho/do/projeto"
+python install.py --agent all --scope project --project-root "C:/path/to/project"
 ```
 
-Codex e Antigravity compartilham `.agents/skills/` no projeto. Claude Code usa `.claude/skills/`.
+Codex and Antigravity share `.agents/skills/` in a project; Claude Code uses `.claude/skills/`.
 
-Veja os destinos sem copiar arquivos:
+Preview destinations without copying files:
 
 ```powershell
 python install.py --agent all --dry-run
 ```
 
-No Codex, também é possível pedir:
+In Codex, you can also ask:
 
-> Use $skill-installer para instalar https://github.com/EvandroSilvaPinto/progress-bubble/tree/main/skills/progress-bubble
+> Use $skill-installer to install https://github.com/EvandroSilvaPinto/progress-bubble/tree/main/skills/progress-bubble
 
-Para instalar manualmente, copie a pasta inteira `skills/progress-bubble` para o destino do seu agente. `agents/openai.yaml` contém metadados opcionais do Codex.
+For manual installation, copy the entire `skills/progress-bubble` folder into your agent's skill directory. `agents/openai.yaml` provides optional Codex metadata.
 
-Para atualizar uma instalação existente, faça backup e mova a pasta anterior antes de reinstalar. Se já usa `~/.codex/skills/` no Codex, atualize essa cópia em vez de criar outra. Evite duplicar instalações pessoais e de projeto.
-
-Em macOS/Linux, use `python3` se necessário. Os caminhos do Antigravity seguem a documentação atual; versões antigas podem usar caminhos legados. No Antigravity CLI, `/skills reload` recarrega as skills.
+Existing Codex installations in `~/.codex/skills/` are updated in place. If both Codex locations contain a copy, resolve the duplicate before continuing. On macOS/Linux, use `python3` if needed. Older Antigravity versions may use legacy paths; in Antigravity CLI, `/skills reload` reloads skills.
 
 </details>
 
-## 🔄 Do pedido à entrega
+## 🔄 Update with one command
 
-**1. Instale e faça seu pedido.** A skill orienta o agente a aplicá-la em **toda interação**, sem invocação explícita. A bolinha e o HTML são criados quando a tarefa for estimada em mais de **30 segundos**, ou ultrapassar esse tempo durante a execução. Pedidos rápidos passam apenas pela verificação inicial.
+From your cloned repository's folder, run:
 
-**2. Continue o seu dia.** A bolinha mantém o percentual à vista. Clique para expandir o cartão; arraste para mudar de posição.
+```powershell
+python update.py --agent all
+```
 
-**3. Confira o resultado.** Ao concluir e verificar a entrega, o agente marca **100%**. A bolinha fica disponível até você fechá-la com **×** ou iniciar outra interação no mesmo chat. Nesse momento, o agente fecha o acompanhamento concluído anterior e preserva o HTML. Fechar a janela não cancela o trabalho.
+To update one agent, replace `all` with `codex`, `claude` or `antigravity`:
 
-> **Progresso estimado, sem falsa precisão.** Quem atualiza o andamento é o agente. O limite de 30 segundos é uma instrução de uso, não um cronômetro que intercepta todas as tarefas. A descrição solicita uso automático, e o Codex permite invocação implícita. A seleção efetiva depende de o agente carregar e seguir a skill; a instalação não cria um serviço em segundo plano nem força o modelo a executá-la. Se ela não aparecer, recarregue as skills ou inicie uma nova sessão.
+```powershell
+python update.py --agent codex
+```
 
-Para reforçar o uso nas instruções permanentes do seu agente, adicione:
+This fetches the latest version with `git pull --ff-only` and updates skills, installing missing ones as well. If Git cannot update the repository, installed skills remain unchanged. Resolve conflicting local changes before retrying. Fetching updates requires Git and internet access.
 
-> Aplique a skill progress-bubble no início de toda interação, sem invocação explícita. Feche acompanhamentos concluídos deste chat e crie progresso para demandas estimadas acima de 30 segundos ou que ultrapassem esse tempo.
+**Automatic backup:** the entire previous installation is saved in `progress-bubble-backups/`, next to the `skills/` directory. The terminal prints its location. Skill-file customizations remain in the backup and are not merged automatically. Colors in `ProgressBubble/colors.json` are preserved. If replacing an installation fails, that installation is restored; updates already completed in other destinations remain in place.
 
-Use `AGENTS.md` no Codex, `CLAUDE.md` no Claude Code ou as regras do Antigravity, conforme sua configuração.
+Reload skills or start a new agent session afterwards. Open bubbles retain their loaded version until closed and reopened.
 
-## 🎨 Do seu jeito
+<details>
+<summary><strong>Update a project, preview changes or use a downloaded copy</strong></summary>
 
-Clique em **Cores** para abrir cinco bolinhas centralizadas acima do acompanhamento. Passe o mouse para ver o tooltip e clique para escolher a cor:
+```powershell
+python update.py --agent all --scope project --project-root "C:/path/to/project"
+python update.py --agent all --dry-run
+```
 
-| Cor | O que muda |
+A dry run only displays destinations, without downloads or file changes. If you downloaded the latest ZIP instead of cloning, open the extracted folder and run:
+
+```powershell
+python install.py --agent all --update
+```
+
+This uses local files without fetching updates. To restore a backup manually, close bubbles, move the current installation to a separate backup folder and return the saved version to its original path. Then reload skills.
+
+</details>
+
+<a id="how-it-works"></a>
+
+## 🔄 From request to delivery
+
+**1. Install and ask for your work.** The skill instructs the agent to apply it in **every interaction**, without explicit invocation. A bubble and HTML page are created for tasks estimated to take more than **30 seconds**, or that exceed this time during execution. Quick requests only need the initial check.
+
+**2. Keep going with your day.** Click the bubble to expand its card; drag to reposition it.
+
+**3. Check the result.** Once delivery is complete and verified, the agent marks **100%**. The **card's ×** only collapses the card. To close the bubble, hover over it and click the **× above and outside its upper-right corner**. Completed trackers also close when a new interaction begins in the same chat; their HTML remains available. Closing a window does not cancel the task.
+
+> **Estimated progress, without false precision.** The agent supplies updates. The 30-second threshold is an instruction, not a system timer intercepting tasks. The description requests automatic use, and Codex permits implicit invocation. Actual selection depends on the agent discovering and following the skill. Installation does not create a background service or force the model to run it. If it does not appear, reload skills or start a new session.
+
+To reinforce the preference in permanent instructions, add:
+
+> Apply the progress-bubble skill at the start of every interaction, without explicit invocation. Close completed trackers from this chat and create progress tracking for tasks estimated to take more than 30 seconds or that exceed that time.
+
+Use `AGENTS.md` for Codex, `CLAUDE.md` for Claude Code or Antigravity rules, according to your setup.
+
+## 🎨 Make it yours
+
+Click **Colors** to reveal five centered circles above the card. Hover for a tooltip and click to choose a color:
+
+| Color | Controls |
 | --- | --- |
-| **Fundo** | Cartão e bolinha |
-| **Texto** | Títulos, percentual e mensagens |
-| **Progresso** | Anel e barra |
-| **Detalhes** | Links e tempo restante |
-| **Estados** | Conclusão, falha e espera |
+| **Background** | Card and bubble backgrounds |
+| **Text** | Titles, percentage and messages |
+| **Progress** | Ring and bar |
+| **Details** | Links and time remaining |
+| **States** | Completion, failure and waiting |
 
-A escolha é aplicada e salva imediatamente para os próximos acompanhamentos. Os estados também usam símbolos e texto. A logo verde mantém a identidade do projeto.
+Choices are applied and saved immediately. **Reset colors** appears beside **Colors**, with spacing, only while the palette is visible. It restores every default shade, including derived and state colors. Other open trackers receive the changes on their next refresh. Statuses also use symbols and text. The green logo retains its original colors.
 
-**Tempo restante discreto:** veja algo como “Faltam cerca de 3 min”, sem horário exato de término. A estimativa é informada pelo agente e pode ser revista durante a execução.
+**Three sizes, two independent settings:** click **Sizes** in the card, or right-click the bubble. Choose **Small**, **Medium** or **Large** in each group:
 
-**Volte ao chat:** quando a origem estiver disponível, **Abrir conversa** leva à conversa da demanda. Caso contrário, **Abrir detalhes** abre o HTML. A janela flutuante permanece fora da barra de tarefas e do Alt+Tab.
+- **Card and colors:** scales the card, its text and palette together.
+- **Bubble:** scales the ring, percentage and its close button.
 
-## 🧪 Experimente antes de usar com o agente
+Medium uses the default scale; Small uses 85% and Large uses 120%, respecting Windows display scaling. Choices are stored in `sizes.json`, next to `colors.json`, and shared across trackers. Resetting colors preserves sizes. On Windows, menu callbacks remain available until the selected command runs. Close old bubbles and open a new tracker after updating.
 
-Na pasta deste repositório, abra uma demonstração:
+**Sharper rendering:** color circles, card corners, the bar and close button use antialiased edges at their selected size and Windows scale. Text uses whole-pixel dimensions. Rendering uses the Python standard library with caching and no extra runtime dependencies.
+
+**Parallel tasks:** new trackers open offset to the left, with space between bubbles. When a row reaches the screen edge, the next starts above it. Free positions are reused. You can still drag each tracker; opening another does not move existing windows. Position allocation requires bubbles opened with this version; close and reopen older ones.
+
+**Discreet time remaining:** see “About 3 min left”, without an exact finish time. The agent supplies the estimate and can revise it as work progresses.
+
+**Return to the chat:** **Open chat** opens the task's conversation when an origin link is available; otherwise, **Open details** opens the HTML. The floating window stays out of the taskbar and Alt+Tab.
+
+## 🧪 Try it before using it with an agent
+
+From the repository folder, open a demo:
 
 ```powershell
-python skills/progress-bubble/scripts/status.py --output outputs/demo.html --title "Preparando relatório" --percent 35 --message "Organizando o conteúdo" --eta-minutes 3 --open
+python skills/progress-bubble/scripts/status.py --output outputs/demo.html --title "Preparing report" --percent 35 --message "Organizing the content" --eta-minutes 3 --open
 ```
 
-Atualize a mesma demonstração:
+Update the same demo:
 
 ```powershell
-python skills/progress-bubble/scripts/status.py --output outputs/demo.html --title "Preparando relatório" --percent 100 --status "Concluído" --message "Relatório entregue e verificado"
+python skills/progress-bubble/scripts/status.py --output outputs/demo.html --title "Preparing report" --percent 100 --status "Concluído" --message "Report delivered and verified"
 ```
 
-Sem `--open`, o comando gera apenas o HTML e o JSON. Abra o HTML no navegador para acompanhar.
+`--status` uses Portuguese technical values even when the interface is English. Without `--open`, the command only generates HTML and JSON. Open the HTML in a browser to follow progress.
 
 <details>
-<summary><strong>Requisitos, estados e frequência de atualização</strong></summary>
+<summary><strong>Requirements, statuses and refresh frequency</strong></summary>
 
-- **HTML/JSON:** Python 3.10+ e navegador para visualizar a página.
-- **Bolinha:** Windows nativo, sessão gráfica, Tkinter e `pythonw.exe`. `python -m tkinter` abre uma janela de teste.
-- **Agente:** suporte a skills e permissão para gravar arquivos e executar Python. A instalação não altera permissões nem instala Python.
-- **Atualizações:** o agente busca salvar avanços aproximadamente a cada 30 segundos; a bolinha lê os dados a cada 0,5 segundo e o HTML ativo recarrega a cada 1 segundo. A contagem do tempo restante se atualiza na interface; o percentual depende de avanços salvos pelo agente.
-- **Chamadas longas:** ferramentas bloqueantes podem impedir atualizações intermediárias. Visualizadores de HTML incorporados podem exigir recarga manual.
-- **Estados:** `Em andamento`, `Aguardando informação`, `Concluído`, `Interrompido` e `Falha`. Somente `Concluído` aceita 100%; em falha, preserve o percentual alcançado.
-- **Personalização:** altere o limite no `SKILL.md` e na descrição de `agents/openai.yaml`. Não há informação de última atualização na interface.
+- **HTML/JSON:** Python 3.10+ and a browser.
+- **Bubble:** native Windows, a graphical session, Tkinter and `pythonw.exe`. `python -m tkinter` opens a test window.
+- **Agent:** skill support and permission to write files and execute Python. Installation does not change permissions or install Python.
+- **Updates:** the agent aims to save real advances roughly every 30 seconds. The bubble reads saved data every 0.5 seconds; active HTML refreshes every second. The remaining-time counter updates in the interface; percentages depend on updates saved by the agent.
+- **Long calls:** blocking tools may prevent intermediate updates. Embedded HTML viewers may require manual refreshes.
+- **Status arguments:** `Em andamento` (In progress), `Aguardando informação` (Waiting for information), `Concluído` (Completed), `Interrompido` (Stopped) and `Falha` (Failed). Only `Concluído` accepts 100%; on failure, preserve the percentage reached.
+- **Customization:** adjust the threshold in `SKILL.md` and keep discovery metadata consistent. No last-update timestamp is shown.
 
 </details>
 
 <details>
-<summary><strong>Privacidade, execução remota e solução de problemas</strong></summary>
+<summary><strong>Privacy, remote execution and troubleshooting</strong></summary>
 
-Os dados ficam nos arquivos do caminho escolhido. O botão de detalhes abre o HTML no navegador padrão; quando disponível, o link da conversa abre o aplicativo ou site de origem. Evite colocar credenciais ou informações sensíveis no título e na mensagem; não publique acompanhamentos reais.
+Data stays at your chosen file location. Details open in the default browser; chat links open their original app or website. Avoid credentials or sensitive information in titles and messages. Do not publish real tracking files.
 
-Cada demanda deve usar um arquivo diferente. Uma nova abertura para o mesmo JSON não duplica a janela. Não há inicialização automática com o Windows nem execução de trabalho após o encerramento do agente. Textos extensos são resumidos no cartão e preservados no HTML.
+Use a different file for each task. Reopening the same JSON does not duplicate its window. The skill does not start with Windows or continue working after the agent stops. Long text is shortened in the card and preserved in HTML.
 
-Em WSL, contêineres e agentes remotos, use o HTML. Executar um script remoto não abre uma janela no desktop local. As permissões e políticas do seu ambiente continuam valendo.
+In WSL, containers and remote agents, use HTML. A remote script does not open a window on your local desktop. Your environment's permissions and policies still apply.
 
-Se a bolinha não aparecer, confirme os requisitos e execute no terminal para ver o erro:
+If the bubble does not appear, check requirements and run it in a terminal to see errors:
 
 ```powershell
 python skills/progress-bubble/scripts/bubble.py outputs/demo.json
 ```
 
-Os scripts são resolvidos a partir da pasta da skill instalada, sem caminhos pessoais fixos. No Claude Code, `${CLAUDE_SKILL_DIR}` também pode identificar essa pasta. Use `python`, `python3` ou `py -3` conforme o interpretador disponível.
+Scripts are resolved relative to the installed skill folder, without fixed personal paths. In Claude Code, `${CLAUDE_SKILL_DIR}` can identify that folder. Use `python`, `python3` or `py -3`, depending on the interpreter.
 
 </details>
 
-## 🛠️ Feito para compartilhar e evoluir
+## 🛠️ Built to share and improve
 
-Os testes cobrem instalação nos três destinos, execução após mover a skill, preservação de arquivos existentes, caracteres especiais, estados e conclusão. O CI roda em **Windows e Linux**, com **Python 3.10 e 3.13**.
+Every project change must include a README update in the same delivery, as recorded in `AGENTS.md`. The optional GIF generator, `tools/render_demo.py`, uses Pillow only to create the image; the skill itself has no pip dependencies.
+
+Tests cover installation for all three agents, relocated installations, existing-file protection, backups and updates, special characters, statuses, completion, colors, sizes, language detection, rendering and parallel placement. CI runs on **Windows and Linux**, with **Python 3.10 and 3.13**.
 
 ```powershell
 python -m unittest discover -s tests -v
 ```
 
-**O que foi validado:** instalador, scripts e caminhos documentados. A janela foi inspecionada manualmente no Windows com Python 3.13. A seleção automática ainda precisa ser conferida numa sessão de cada agente.
+**Validation scope:** installer, scripts and documented paths. The window has been inspected manually on Windows with Python 3.13. Automatic skill selection still needs checking in a session of each agent.
 
-Encontrou um problema ou tem uma ideia? [Abra uma issue](https://github.com/EvandroSilvaPinto/progress-bubble/issues). Pull requests são bem-vindos. Informe sistema, versão do Python, comando e resultado esperado, sem anexar dados privados.
+Found a problem or have an idea? [Open an issue](https://github.com/EvandroSilvaPinto/progress-bubble/issues). Pull requests are welcome. Include your operating system, Python version, command and expected result, without private data.
 
-Se o projeto ajudou você, uma **⭐ no repositório** ajuda outras pessoas a encontrá-lo.
+If this project helps you, a **⭐ on the repository** helps others find it.
 
 ---
 
-**Licença [MIT](LICENSE)** · Projeto independente, sem afiliação oficial com OpenAI, Anthropic ou Google.
+**[MIT License](LICENSE)** · Independent project, not officially affiliated with OpenAI, Anthropic or Google.
 
-Referências de instalação: [Codex](https://learn.chatgpt.com/docs/build-skills) · [Claude Code](https://code.claude.com/docs/en/skills) · [Antigravity](https://antigravity.google/docs/skills). Caminhos conferidos em 13/11/2026.
+Installation references: [Codex](https://learn.chatgpt.com/docs/build-skills) · [Claude Code](https://code.claude.com/docs/en/skills) · [Antigravity](https://antigravity.google/docs/skills). Paths checked on November 13, 2026.

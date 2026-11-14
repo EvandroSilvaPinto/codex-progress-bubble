@@ -7,6 +7,10 @@ description: Apply automatically at the start of every user interaction after in
 
 Skill compartilhada para Codex, Claude Code e Google Antigravity. O formato principal usa apenas `name` e `description`; `agents/openai.yaml` contém metadados opcionais do Codex. Os scripts são os mesmos nos três agentes.
 
+## Idioma da interface
+
+Detectar automaticamente o idioma do sistema: português para localidades pt, inglês para en e como fallback para demais idiomas. O helper `i18n.py` usa o idioma de exibição no Windows e as variáveis de localidade nos demais sistemas. Botões, menus, estados visíveis, tooltips, avisos, previsão e HTML são localizados sem dependências externas. Títulos e mensagens são preservados como enviados pelo agente; não traduzi-los automaticamente por substituição de palavras. Os estados internos e o argumento `--status` permanecem com os valores canônicos documentados em português, independentemente do idioma de exibição. Cores e tamanhos salvos permanecem compatíveis. Para carregar uma alteração de idioma, abrir um novo acompanhamento.
+
 ## Adaptação ao agente
 
 - Codex: invocação explícita `$progress-bubble`; instalação pessoal em `~/.agents/skills/` ou de projeto em `.agents/skills/`.
@@ -40,7 +44,7 @@ Usar o helper incluído com Python já instalado (Tkinter), sem instalar program
 python "<diretorio-absoluto-desta-skill>/scripts/status.py" --output outputs/status-demanda.html --title "Preparando relatório" --percent 10 --message "Trabalho iniciado" --eta-minutes 3 --open
 ```
 
-O helper grava HTML e JSON lado a lado e abre a bolinha sem console. Ela fica por cima das janelas, pode ser arrastada e lê o JSON a cada 0,5 segundo. Clique abre/recolhe o cartão; × fecha a janela; o cartão também abre o HTML. Verde indica conclusão, rosa indica falha. Manter a bolinha disponível ao concluir até o usuário fechá-la ou começar uma nova interação neste mesmo chat.
+O helper grava HTML e JSON lado a lado e abre a bolinha sem console. Ela fica por cima das janelas, pode ser arrastada e lê o JSON a cada 0,5 segundo. Clique na bolinha abre/recolhe o cartão. O × do cartão fecha apenas o acompanhamento, preservando a bolinha. Ao passar o mouse sobre a bolinha, mostrar um × no canto superior direito para fechar a janela inteira; manter esse botão acessível ao mover o ponteiro até ele. O cartão também abre o HTML. Verde indica conclusão, rosa indica falha. Manter a bolinha disponível ao concluir até o usuário fechá-la ou começar uma nova interação neste mesmo chat.
 
 Nas atualizações, repetir o comando com o MESMO caminho, título, novo percentual e mensagem, sem `--open`. Informar `--status` quando necessário: `"Aguardando informação"`, `"Concluído"`, `"Interrompido"` ou `"Falha"`. Para concluir, usar `--percent 100 --status "Concluído"`. A opção `--open` não duplica uma janela já aberta para o mesmo JSON. Se o usuário fechar, continuar atualizando o HTML sem reabrir automaticamente durante essa demanda.
 
@@ -64,11 +68,21 @@ Compartilhar um link clicável com caminho absoluto logo na criação. Se a visu
 
 ### Cores personalizáveis
 
-O link `Cores` no topo do cartão mostra ou esconde cinco bolinhas acima do acompanhamento: **Fundo, Texto, Progresso, Detalhes e Estados**. O clique direito na bolinha principal também alterna essa fileira. Clicar em uma bolinha de cor abre a paleta nativa; confirmar aplica e salva imediatamente, cancelar preserva a escolha anterior. Não abrir uma janela com uma lista de campos.
+O link `Cores` no topo do cartão mostra ou esconde cinco bolinhas acima do acompanhamento: **Fundo, Texto, Progresso, Detalhes e Estados**. O clique direito na bolinha principal abre o menu de tamanhos. Clicar em uma bolinha de cor abre a paleta nativa; confirmar aplica e salva imediatamente, cancelar preserva a escolha anterior. Não abrir uma janela com uma lista de campos. Ao lado de `Cores`, com espaçamento, o link `Redefinir cores` aparece somente enquanto a paleta estiver aberta e restaura e salva a paleta padrão completa, incluindo cores secundárias e de estados. Aplicar ao acompanhamento atual e propagar aos demais abertos pela leitura das preferências; futuras demandas usam o padrão restaurado.
 
 Fundo controla o cartão e a bolinha; Texto controla títulos, mensagens e percentual; Progresso controla barra e anel; Detalhes controla links e tempo restante; Estados controla conclusão, falha e espera. Bordas, trilhas e tons secundários são derivados de Fundo e Texto. Os estados também usam símbolos e nomes para não dependerem só da cor. Cores personalizadas antigas são preservadas até o usuário editar o grupo correspondente. A logo da marca não muda.
 
 As preferências ficam em `%APPDATA%/ProgressBubble/colors.json` no Windows e em `$XDG_CONFIG_HOME/ProgressBubble/colors.json` ou `~/.config/ProgressBubble/colors.json` nos demais sistemas. Outras bolinhas abertas e os HTMLs vinculados recebem as escolhas; futuras demandas reutilizam essas cores. Avisar se houver baixo contraste nas combinações verificadas, sem substituir silenciosamente a preferência do usuário.
+
+As bolinhas de cores, cantos do cartão, barra e botão externo usam imagens com bordas suavizadas, renderizadas na escala nativa de cada componente. Preservar esse tratamento ao alterar tamanhos, sem esticar bitmaps pequenos. Os textos usam tamanhos em pixels inteiros. O helper mantém cache e não exige bibliotecas externas.
+
+### Acompanhamentos simultâneos
+
+Cada processo reserva uma posição independente no Windows com um handle nomeado, sem varrer demandas ou arquivos de outros chats. Novas bolinhas ocupam posições à esquerda, separadas por sua largura e um espaço, com novas fileiras acima quando necessário. Liberar a reserva ao fechar; o Windows também libera o handle se o processo terminar inesperadamente. Respeitar o tamanho da tela e o tamanho escolhido. Não mover bolinhas existentes ao abrir outras; permitir arraste manual. A coordenação exige que as bolinhas tenham sido abertas com esta versão.
+
+### Tamanhos independentes
+
+O link `Tamanhos` no cartão e o clique direito na bolinha abrem dois grupos: `Acompanhamento e cores` e `Bolinha`. Cada grupo oferece Pequeno (85%), Médio (100%, padrão) e Grande (120%). Escalar o cartão e a paleta juntos; a bolinha, percentual e botão externo usam sua própria escala. Salvar as escolhas em `sizes.json` ao lado de `colors.json`, reutilizar nas próximas demandas e propagar aos acompanhamentos abertos. Redefinir cores não altera tamanhos. O redimensionamento preserva a posição inferior direita sempre que couber na tela.
 
 ### Abrir a conversa de origem
 
@@ -95,3 +109,9 @@ Ao concluir, salvar 100%, status Concluído e uma frase de resultado; incluir li
 ## Limites
 
 Criar somente o acompanhamento necessário. Não publicar, abrir portas ou instalar serviços para isso. Não expor credenciais, dados sensíveis ou detalhes internos desnecessários. O HTML complementa as atualizações da conversa.
+
+## Manutenção e atualização da própria skill
+
+Ao modificar o projeto Progress Bubble, atualizar o README na mesma entrega para refletir o comportamento, comandos e limitações atuais. Essa regra se refere à manutenção desta skill, não exige alterar o README de todo projeto que ela acompanha.
+
+Para atualizar uma instalação a pedido do usuário, na cópia clonada do repositório usar `python update.py --agent codex`, `claude`, `antigravity` ou `all`, conforme o escopo solicitado. O comando busca a versão atual via Git e instala com backup. Em uma cópia extraída do ZIP mais recente, usar `python install.py --agent <agente> --update`. Não tentar atualizar silenciosamente em cada interação. Não presumir a existência do repositório na pasta instalada: esses comandos ficam na raiz do projeto. Recarregar as skills após atualizar.

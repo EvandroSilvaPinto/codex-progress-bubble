@@ -7,7 +7,7 @@ import zlib
 
 @lru_cache(maxsize=12)
 def ring_png(percent, color, scale=1.0, background='#101827', track='#27334a', border='#29364c'):
-    size = max(84, round(84*scale))
+    size = max(32, round(84*scale))
     factor = size/84
     accent = tuple(int(color[i:i+2],16) for i in (1,3,5))
     base,empty,edge = [tuple(int(c[i:i+2],16) for i in (1,3,5)) for c in (background,track,border)]
