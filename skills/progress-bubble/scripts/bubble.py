@@ -15,6 +15,8 @@ from i18n import t as tr
 from shapes import rounded_png
 from sizing import load_sizes, save_size, geometry, show_size_menu
 from placement import PositionSlot, initial_position
+from progress import displayed_progress
+from window_style import configure_window
 
 TRANSPARENT = '#010203'
 
@@ -38,6 +40,7 @@ class Bubble:
             user.SetProcessDPIAware()
         self.root = tk.Tk()
         self.root.withdraw()
+        self.root.overrideredirect(True)
         self.root.attributes('-toolwindow', True)
         self.scale = max(1.0,user.GetDpiForSystem()/96)
         self.root.tk.call('tk','scaling',self.scale*96/72)
@@ -56,16 +59,7 @@ class Bubble:
             self.width,self.height,self.scale,self.layout['bubble'],self.position_slot.index)
         self.root.geometry(f'{self.width}x{self.height}+{x}+{y}')
         self.root.update_idletasks()
-        user = ctypes.WinDLL('user32', use_last_error=True)
-        user.GetParent.argtypes = [ctypes.c_void_p]
-        user.GetParent.restype = ctypes.c_void_p
-        hwnd = user.GetParent(self.root.winfo_id())
-        user.GetWindowLongW.argtypes = [ctypes.c_void_p, ctypes.c_int]
-        user.SetWindowLongW.argtypes = [ctypes.c_void_p, ctypes.c_int, ctypes.c_long]
-        user.SetWindowLongW(hwnd, -16, user.GetWindowLongW(hwnd, -16) & ~0x00C40000)
-        # Floating tool window: visible on the desktop, absent from taskbar/Alt+Tab.
-        extended = user.GetWindowLongW(hwnd, -20)
-        user.SetWindowLongW(hwnd, -20, (extended & ~0x00040000) | 0x00000080)
+        self.hwnd = configure_window(self.root)
         self.canvas = tk.Canvas(self.root, bg=TRANSPARENT, highlightthickness=0)
         self.canvas.pack(fill='both', expand=True)
         self.tooltip = Tooltip(self.root)
@@ -109,7 +103,7 @@ class Bubble:
         c = self.canvas
         c.delete('all')
         self.shape_images = []
-        p = max(0, min(100, int(self.data.get('percent', 0))))
+        p = round(displayed_progress(self.data),1)
         status = self.data.get('status', 'Aguardando atualização')
         t = self.theme
         color = t[{'Concluído':'complete','Falha':'error',
@@ -126,7 +120,7 @@ class Bubble:
             self.text(23,46,title[:48]+('…' if len(title)>48 else ''),14,bold=True,width=300,translate=False)
             symbol = {'Concluído':'✓','Falha':'!','Interrompido':'‖','Aguardando informação':'?'}.get(status,'▶')
             self.text(23,90,symbol+' '+tr(status),9,color)
-            self.text(23,153,f'{p}%',25,bold=True,anchor='sw')
+            self.text(23,153,f'{int(p)}%',25,bold=True,anchor='sw')
             self.text(132,153,'progresso estimado',9,t['muted'],anchor='sw')
             self.rounded(23,164,329,171,3,t['track'],'progress')
             if p:
@@ -159,7 +153,7 @@ class Bubble:
         self.ring_image = tk.PhotoImage(data=ring_png(p,t['ring'] if status=='Em andamento' else color,
             bs,t['bubble_background'],t['track'],t['border']))
         c.create_image(bx,by,image=self.ring_image,anchor='nw',tags='bubble')
-        c.create_text(bx+42*bs,by+42*bs,text=f'{p}%',fill=t['bubble_text'],
+        c.create_text(bx+42*bs,by+42*bs,text=f'{int(p)}%',fill=t['bubble_text'],
                       font=('Segoe UI',-max(1,round(14*bs*96/72)),'bold'),tags='bubble')
         self.draw_bubble_close()
 
@@ -319,9 +313,12 @@ class Bubble:
                 self.root.destroy()
                 return
             current_eta = eta_text(data)
-            if data != self.data or current_eta != getattr(self,'last_eta',None):
+            current_progress = round(displayed_progress(data),1)
+            if (data != self.data or current_eta != getattr(self,'last_eta',None)
+                    or current_progress != getattr(self,'last_progress',None)):
                 self.data = data
                 self.last_eta = current_eta
+                self.last_progress = current_progress
                 self.draw()
         except (OSError, ValueError, KeyError):
             if not self.data:

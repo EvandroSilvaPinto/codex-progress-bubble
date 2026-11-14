@@ -163,7 +163,7 @@ This uses local files without fetching updates. To restore a backup manually, cl
 
 **3. Check the result.** Once delivery is complete and verified, the agent marks **100%**. The **card's ×** only collapses the card. To close the bubble, hover over it and click the **× above and outside its upper-right corner**. Completed trackers also close when a new interaction begins in the same chat; their HTML remains available. Closing a window does not cancel the task.
 
-> **Estimated progress, without false precision.** The agent supplies updates. The 30-second threshold is an instruction, not a system timer intercepting tasks. The description requests automatic use, and Codex permits implicit invocation. Actual selection depends on the agent discovering and following the skill. Installation does not create a background service or force the model to run it. If it does not appear, reload skills or start a new session.
+> **Estimated progress, without false precision.** The agent supplies actual progress updates; the interface can advance a separate visual estimate between them using the remaining-time estimate. The 30-second threshold is an instruction, not a system timer intercepting tasks. The description requests automatic use, and Codex permits implicit invocation. Actual selection depends on the agent discovering and following the skill. Installation does not create a background service or force the model to run it. If it does not appear, reload skills or start a new session.
 
 To reinforce the preference in permanent instructions, add:
 
@@ -194,7 +194,13 @@ Medium uses the default scale; Small uses 85% and Large uses 120%, respecting Wi
 
 **Sharper rendering:** color circles, card corners, the bar and close button use antialiased edges at their selected size and Windows scale. Text uses whole-pixel dimensions. Rendering uses the Python standard library with caching and no extra runtime dependencies.
 
+**Dragging on Windows:** the floating window uses a frameless native configuration with non-client rendering disabled for that window, avoiding the Windows frame shadow during dragging. This does not change system-wide visual effects. Close old bubbles and open a new tracker after updating to load the window-style fix.
+
 **Parallel tasks:** new trackers open offset to the left, with space between bubbles. When a row reaches the screen edge, the next starts above it. Free positions are reused. You can still drag each tracker; opening another does not move existing windows. Position allocation requires bubbles opened with this version; close and reopen older ones.
+
+**Smooth estimated progress:** when the agent provides a remaining-time estimate, the bar, ring and percentage gradually advance between real updates. The visual estimate uses 90% of the remaining range toward 95% over the estimated duration, so it moves slightly slower than the estimate. For example, starting at 10% with 10 minutes remaining reaches about 86% after those 10 minutes, then stops at 95%. Actual agent updates can show a higher value, but automatic advancement never reaches 100%. Only confirmed completion reaches 100%.
+
+The displayed value remains labeled as estimated progress; it is not a measurement of completed work. The saved JSON `percent` continues to record the agent's reported value. A revised estimate preserves visual continuity instead of jumping backwards. Waiting, failure or interruption freezes the visual estimate; resuming requires a new remaining-time estimate. Without an estimate, progress changes only when the agent reports an update. Reopening the HTML preserves the saved time anchor rather than restarting the animation.
 
 **Discreet time remaining:** see “About 3 min left”, without an exact finish time. The agent supplies the estimate and can revise it as work progresses.
 
@@ -222,7 +228,7 @@ python skills/progress-bubble/scripts/status.py --output outputs/demo.html --tit
 - **HTML/JSON:** Python 3.10+ and a browser.
 - **Bubble:** native Windows, a graphical session, Tkinter and `pythonw.exe`. `python -m tkinter` opens a test window.
 - **Agent:** skill support and permission to write files and execute Python. Installation does not change permissions or install Python.
-- **Updates:** the agent aims to save real advances roughly every 30 seconds. The bubble reads saved data every 0.5 seconds; active HTML refreshes every second. The remaining-time counter updates in the interface; percentages depend on updates saved by the agent.
+- **Updates:** the agent aims to save real advances roughly every 30 seconds. The bubble reads saved data every 0.5 seconds; active HTML refreshes every second. The remaining-time counter updates in the interface; the displayed percentage can also advance smoothly from the time estimate, while the saved `percent` remains the value supplied by the agent.
 - **Long calls:** blocking tools may prevent intermediate updates. Embedded HTML viewers may require manual refreshes.
 - **Status arguments:** `Em andamento` (In progress), `Aguardando informação` (Waiting for information), `Concluído` (Completed), `Interrompido` (Stopped) and `Falha` (Failed). Only `Concluído` accepts 100%; on failure, preserve the percentage reached.
 - **Customization:** adjust the threshold in `SKILL.md` and keep discovery metadata consistent. No last-update timestamp is shown.

@@ -28,14 +28,14 @@ def frame(percent, expanded=True, palette=False, complete=False):
     text(58, 116, 'Your agent works.', 30, bold=True)
     text(58, 159, 'You stay in the loop.', 30, bold=True)
     text(58, 223, 'Codex · Claude Code · Antigravity', 15, MUTED)
-    text(58, 254, 'Progress and time remaining in view.', 16, MUTED)
+    text(58, 254, 'Smooth estimates. Progress in view.', 16, MUTED)
     caption = ('Parallel tasks, bubbles side by side.' if complete and not expanded else
                'Delivered. Ready for your next request.' if complete else
                'Five colors. Your combination.' if palette else
                'Click to open the progress card.' if not expanded else
                'Clear status. Keep your focus.')
     text(58, 354, caption, 16, GREEN if complete else FG)
-    text(58, 489, 'Illustrative demo · estimated progress and duration', 12, MUTED)
+    text(58, 489, 'Illustrative demo · time-based estimated progress', 12, MUTED)
     y = 122
     if expanded:
         box((518, y, 902, y+282), 22, CARD, '#2b374d')

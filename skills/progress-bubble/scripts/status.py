@@ -12,6 +12,7 @@ from timing import eta_text
 from navigation import conversation_url
 from colors import load_colors, css
 from i18n import t, system_language
+from progress import displayed_progress, visual_state, progress_script
 
 
 def save(path, content):
@@ -83,6 +84,8 @@ def main():
     data = dict(title=args.title, percent=args.percent, status=args.status,language=language,
                 message=args.message, updated=now, html=str(target), eta_at=eta_at,
                 conversation_url=origin_url,conversation_app=str(app.resolve()) if app else previous.get('conversation_app'))
+    data.update(visual_state(previous,args.percent,args.status,eta_at,moment))
+    visible = displayed_progress(data,moment)
     eta = html.escape(eta_text(data))
     escaped = {key: html.escape(str(value)) for key, value in data.items()}
     escaped['status'] = html.escape(t(args.status,language))
@@ -101,8 +104,8 @@ main{{width:min(100%,580px);padding:clamp(24px,6vw,48px);background:linear-gradi
 .eyebrow{{font-size:11px;letter-spacing:.2em;color:#8897ae;font-weight:600}}h1{{font-size:clamp(23px,5vw,32px);line-height:1.25;margin:16px 0 24px}}.status{{display:inline-block;border:1px solid #6379c855;background:#8b9dff12;color:#b9c3ff;padding:5px 12px;border-radius:20px;font-size:13px;margin-bottom:30px}}
 progress{{display:block;appearance:none;width:100%;height:10px;border:0;border-radius:20px;overflow:hidden;background:#27334a;accent-color:#8b9dff}}progress::-webkit-progress-bar{{background:#27334a}}progress::-webkit-progress-value{{background:linear-gradient(90deg,#7c83ff,#9db9ff);border-radius:20px}}progress::-moz-progress-bar{{background:#8b9dff}}.value{{font-size:38px;font-weight:650;margin:14px 0 24px}}.value span{{font-size:13px;font-weight:400;color:#8897ae;margin-left:10px}}.message{{color:#c5cfdf}}footer{{margin-top:30px;padding-top:18px;border-top:1px solid #29354a;color:#8897ae;font-size:12px}}
 </style><style id="custom-colors">{css(load_colors(),args.status)}</style></head><body><main><div class="eyebrow">{labels['tracking']}</div><h1>{escaped['title']}</h1><div class="status">● {escaped['status']}</div>
-<progress aria-label="{labels['progress']}" max="100" value="{args.percent}"></progress>
-<p class="value">{args.percent}%<span>{labels['estimated']}</span></p><p class="message">{escaped['message']}</p>
+<progress aria-label="{labels['progress']}" max="100" value="{visible}"></progress>
+<p class="value"><b id="progress-value">{math.floor(visible)}%</b><span>{labels['estimated']}</span></p><p class="message">{escaped['message']}</p>
 <p id="eta" data-finish="{escaped['eta_at'] if eta_at else ''}" style="color:#9aadff;font-size:13px;font-weight:400">{eta}</p>
 {('<a href="'+escaped['conversation_url']+'" style="color:#9aadff;font-size:13px">'+labels['chat']+'</a>') if origin_url else ''}
 <script>
@@ -113,6 +116,7 @@ function refreshEta(){{
   el.textContent=left<=0?words.overdue:left<60000?words.short:words.remaining.replace('{{minutes}}',Math.ceil(left/60000));
 }}
 refreshEta();setInterval(refreshEta,1000);
+{progress_script(data)}
 </script>
 </main></body></html>'''
     save(target, page)
