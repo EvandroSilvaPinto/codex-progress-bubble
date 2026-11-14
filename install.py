@@ -3,7 +3,7 @@ import argparse
 from pathlib import Path
 import shutil
 
-NAME = 'acompanhar-demandas-longas'
+NAME = 'progress-bubble'
 SOURCE = Path(__file__).resolve().parent / 'skills' / NAME
 AGENTS = ('codex', 'claude', 'antigravity')
 

@@ -1,4 +1,5 @@
 import json
+from datetime import datetime
 from pathlib import Path
 import shutil
 import subprocess
@@ -6,7 +7,7 @@ import sys
 import tempfile
 import unittest
 
-SOURCE = Path(__file__).resolve().parents[1] / 'skills/acompanhar-demandas-longas'
+SOURCE = Path(__file__).resolve().parents[1] / 'skills/progress-bubble'
 
 
 class StatusTests(unittest.TestCase):
@@ -18,10 +19,10 @@ class StatusTests(unittest.TestCase):
         shutil.copytree(SOURCE, self.skill)
         self.target = self.root / 'result with spaces' / 'status.html'
 
-    def run_status(self, percent=35, status='Em andamento', message='<script>bad()</script>'):
+    def run_status(self, percent=35, status='Em andamento', message='<script>bad()</script>', extra=()):
         return subprocess.run([sys.executable, str(self.skill/'scripts/status.py'),
             '--output',str(self.target),'--title','Relatório & revisão',
-            '--percent',str(percent),'--status',status,'--message',message],
+            '--percent',str(percent),'--status',status,'--message',message,*extra],
             cwd=self.root, capture_output=True, encoding='utf-8', errors='replace')
 
     def state(self):
@@ -47,6 +48,42 @@ class StatusTests(unittest.TestCase):
         self.assertEqual(self.run_status(100,'Concluído').returncode,0)
         self.assertEqual(self.state()['percent'],100)
         self.assertNotIn('http-equiv',self.target.read_text(encoding='utf-8'))
+
+    def test_estimated_finish_is_saved_preserved_and_cleared_on_completion(self):
+        before = datetime.now().astimezone()
+        result = self.run_status(extra=('--eta-minutes','5'))
+        self.assertEqual(result.returncode,0,result.stderr)
+        eta = datetime.fromisoformat(self.state()['eta_at'])
+        self.assertGreaterEqual((eta-before).total_seconds(),299)
+        self.assertLess((eta-before).total_seconds(),310)
+        self.assertIn('Faltam cerca de 5 min',self.target.read_text(encoding='utf-8'))
+        self.assertEqual(self.run_status(50).returncode,0)
+        self.assertEqual(self.state()['eta_at'],eta.isoformat())
+        self.assertEqual(self.run_status(100,'Concluído').returncode,0)
+        self.assertIsNone(self.state()['eta_at'])
+
+    def test_invalid_estimate_preserves_previous_status(self):
+        self.assertEqual(self.run_status().returncode,0)
+        previous = self.state()
+        for minutes in ('-1','0','nan','inf'):
+            with self.subTest(minutes=minutes):
+                self.assertNotEqual(self.run_status(extra=('--eta-minutes',minutes)).returncode,0)
+                self.assertEqual(self.state(),previous)
+
+    def test_dismiss_only_the_selected_completed_demand(self):
+        command = [sys.executable,str(self.skill/'scripts/status.py'),
+                   '--output',str(self.target),'--dismiss-completed']
+        self.assertEqual(self.run_status(35).returncode,0)
+        before = self.state()
+        self.assertEqual(subprocess.run(command,capture_output=True).returncode,0)
+        self.assertEqual(self.state(),before)
+        self.assertEqual(self.run_status(100,'Concluído').returncode,0)
+        html_before = self.target.read_bytes()
+        self.assertEqual(subprocess.run(command,capture_output=True).returncode,0)
+        self.assertTrue(self.state()['dismissed'])
+        self.assertEqual(self.target.read_bytes(),html_before)
+        self.assertEqual(self.run_status(10).returncode,0)
+        self.assertNotIn('dismissed',self.state())
 
     def test_invalid_update_preserves_previous_state(self):
         self.assertEqual(self.run_status().returncode,0)

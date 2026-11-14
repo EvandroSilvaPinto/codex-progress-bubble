@@ -1,3 +1,0 @@
-interface:
-  display_name: "Acompanhar demandas longas"
-  short_description: "Status em HTML para demandas acima de 30 segundos"

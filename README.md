@@ -1,32 +1,50 @@
-# Progress Bubble — Codex, Claude Code e Antigravity
+<div align="center">
 
-Uma bolinha flutuante para acompanhar o trabalho do Codex, Claude Code e Google Antigravity, com anel de progresso, cartão de status e página HTML local. Um único pacote de skill e os mesmos scripts atendem aos três agentes.
+# 🫧 Progress Bubble
 
-![Ilustração do cartão e da bolinha](assets/preview.svg)
+### Seu agente trabalha. Você acompanha.
 
-## O que faz
+Acompanhamento automático para seu agente, com uma bolinha no desktop, progresso visível e tempo restante estimado.
 
-- Orienta o agente a abrir o acompanhamento em demandas estimadas acima de **30 segundos**, ou quando a execução ultrapassar esse tempo.
-- Mostra percentual estimado, status, mensagem curta e horário da atualização.
-- No Windows, mantém uma bolinha por cima das janelas: clique para expandir, arraste para mover e use × para fechar.
-- Gera HTML independente, sem servidor, conta ou bibliotecas externas.
-- Usa cores diferentes para conclusão, falha e espera.
+**Codex · Claude Code · Google Antigravity**
 
-O progresso é estimado e atualizado pelo agente. A skill não intercepta todas as execuções, não mede automaticamente o trabalho e não garante intervalos exatos durante chamadas bloqueantes. A bolinha lê os dados salvos a cada 2 segundos; o agente busca atualizá-los aproximadamente a cada 30 segundos.
+[![Tests](https://github.com/EvandroSilvaPinto/progress-bubble/actions/workflows/tests.yml/badge.svg)](https://github.com/EvandroSilvaPinto/progress-bubble/actions/workflows/tests.yml)
+[![Python 3.10+](https://img.shields.io/badge/Python-3.10%2B-8b9dff?style=flat-square)](https://www.python.org/downloads/)
+[![Licença MIT](https://img.shields.io/badge/Licen%C3%A7a-MIT-58d9b0?style=flat-square)](LICENSE)
 
-## Requisitos
+[Começar agora](#-comece-em-3-comandos) · [Como funciona](#-do-pedido-à-entrega) · [Agentes compatíveis](#-uma-skill-três-agentes)
 
-| Recurso | Requisitos |
+</div>
+
+![Ilustração do Progress Bubble: cartão de status e bolinha com anel de progresso](assets/preview.svg)
+
+## ✨ Menos troca de janelas. Mais clareza.
+
+Pediu uma tarefa e foi fazer outra coisa? O **Progress Bubble** deixa o andamento visível sobre as outras janelas. Quando quiser mais contexto, basta clicar na bolinha.
+
+| À primeira vista | Ao clicar |
 | --- | --- |
-| HTML e JSON | Python 3.10+; navegador para visualizar o HTML |
-| Bolinha flutuante | Windows, sessão gráfica, Python com Tkinter e `pythonw.exe` |
-| Ativação por demanda | Codex, Claude Code local ou Antigravity com suporte a skills e permissão para gravar arquivos/executar Python |
+| 🫧 Percentual e anel de progresso | 📋 Status, mensagem e tempo restante |
+| 🎨 Cores para conclusão, falha ou espera | 📊 Barra de progresso estimado |
+| 🖱️ Arraste para onde preferir | 🔗 Volte à conversa ou abra os detalhes em HTML |
 
-A janela usa APIs do Windows. Em Linux, macOS e ambientes sem desktop, use o acompanhamento HTML. Não há dependências de pip. Confira o Tkinter no Windows com `python -m tkinter` (abre uma janela de teste).
+**Local por padrão.** Os scripts não enviam telemetria nem precisam de servidor, conta adicional ou dependências de pip.
 
-## Instalar nos três agentes
+> **Antes de instalar:** a bolinha precisa de **Windows nativo + Python 3.10 ou superior com Tkinter**. Em macOS, Linux, WSL e ambientes sem desktop, o acompanhamento pode ser usado em HTML.
 
-Clone ou baixe este repositório. Na raiz, execute o instalador com Python 3.10+:
+## 🚀 Comece em 3 comandos
+
+Com Git e Python instalados, abra o terminal:
+
+```powershell
+git clone https://github.com/EvandroSilvaPinto/progress-bubble.git
+cd progress-bubble
+python install.py --agent all
+```
+
+Pronto: a skill é copiada para as pastas pessoais dos três agentes. Recarregue as skills ou inicie uma nova sessão. A instrução padrão é aplicá-la automaticamente em toda interação, sem precisar chamar um comando.
+
+**Prefere instalar em apenas um?**
 
 ```powershell
 python install.py --agent codex
@@ -34,96 +52,145 @@ python install.py --agent claude
 python install.py --agent antigravity
 ```
 
-Ou instale para os três de uma vez:
+Escolha a linha do seu agente. O instalador preserva instalações existentes: se o destino já existir, ele para e informa o caminho.
 
-```powershell
-python install.py --agent all
-```
+## 🤝 Uma skill, três agentes
 
-Por padrão a instalação é pessoal/global. Para instalar somente em um projeto:
+| Agente | Para chamar a skill | Instalação pessoal/global |
+| --- | --- | --- |
+| **Codex** | `$progress-bubble` | `~/.agents/skills/` |
+| **Claude Code** | `/progress-bubble` | `~/.claude/skills/` |
+| **Google Antigravity** | `/progress-bubble` | `~/.gemini/config/skills/` |
+
+O mesmo `SKILL.md` e os mesmos scripts atendem aos três. O suporte a Claude é para **Claude Code local**; esta instalação não adiciona uma extensão ao chat web do Claude nem sincroniza skills para Cowork.
+
+<details>
+<summary><strong>Instalar em um projeto, conferir os destinos ou usar o skill-installer</strong></summary>
+
+Instalação apenas no projeto escolhido:
 
 ```powershell
 python install.py --agent all --scope project --project-root "C:/caminho/do/projeto"
 ```
 
-Em macOS/Linux, substitua o caminho pelo do projeto e use `python3` se necessário. O HTML funciona nesses sistemas; a bolinha requer Windows nativo. Execute os comandos no computador onde o agente roda. O script não instala Python nem altera permissões.
+Codex e Antigravity compartilham `.agents/skills/` no projeto. Claude Code usa `.claude/skills/`.
 
-| Agente | Pasta pessoal/global | Pasta dentro do projeto | Invocação explícita |
-| --- | --- | --- | --- |
-| Codex | `~/.agents/skills/` | `.agents/skills/` | `$acompanhar-demandas-longas` |
-| Claude Code | `~/.claude/skills/` | `.claude/skills/` | `/acompanhar-demandas-longas` |
-| Antigravity App/IDE/CLI | `~/.gemini/config/skills/` | `.agents/skills/` | `/acompanhar-demandas-longas` |
-
-O instalador copia a pasta inteira, sem links simbólicos. No escopo de projeto, Codex e Antigravity compartilham a mesma instalação. Use `--dry-run` para apenas mostrar os destinos. Uma instalação existente causa erro antes de copiar qualquer arquivo; para atualizar, faça backup e mova a pasta anterior antes de repetir. Não instale cópias pessoais e de projeto desnecessariamente.
-
-Recarregue as skills ou inicie uma nova sessão do agente após instalar. No Antigravity CLI, também pode usar `/skills reload`. Em versões antigas do Antigravity, consulte a documentação da versão: os caminhos legados podem diferir. No Codex com instalação antiga em `~/.codex/skills/`, prefira atualizar a cópia existente a criar uma duplicata.
-
-### Instalação pelo Codex
-
-Envie este pedido ao Codex:
-
-> Use $skill-installer para instalar https://github.com/EvandroSilvaPinto/codex-progress-bubble/tree/main/skills/acompanhar-demandas-longas
-
-Para instalação manual em qualquer agente, copie **a pasta inteira** `skills/acompanhar-demandas-longas` para o destino da tabela. O `SKILL.md` usa campos comuns; `agents/openai.yaml` é metadado opcional do Codex e não é necessário para os outros agentes.
-
-Referências oficiais: [Codex](https://learn.chatgpt.com/docs/build-skills), [Claude Code](https://code.claude.com/docs/en/skills) e [Antigravity](https://antigravity.google/docs/skills). Caminhos conferidos em 13/11/2026.
-
-## Usar
-
-Use a invocação correspondente na tabela ou deixe o agente selecionar a skill conforme a demanda. Para reforçar a preferência em todos os projetos, inclua nas suas instruções permanentes (por exemplo, `AGENTS.md` no Codex, `CLAUDE.md` no Claude Code ou regras do Antigravity):
-
-> Use a skill acompanhar-demandas-longas nas demandas estimadas acima de 30 segundos e nas execuções que ultrapassarem esse tempo.
-
-O limite é uma instrução para o agente, e não um cronômetro do sistema. Para personalizar, altere o limite no `SKILL.md` e na descrição em `agents/openai.yaml`.
-
-A skill resolve os scripts a partir da própria pasta instalada, sem caminhos pessoais fixos. No Claude Code, `${CLAUDE_SKILL_DIR}` também pode identificar essa pasta. Não é preciso editar os scripts para trocar de agente. No terminal, use `python`, `python3` ou `py -3`, conforme seu ambiente.
-
-### Demonstração manual
-
-Na raiz deste repositório, em PowerShell:
+Veja os destinos sem copiar arquivos:
 
 ```powershell
-python skills/acompanhar-demandas-longas/scripts/status.py --output outputs/demo.html --title "Preparando relatório" --percent 15 --message "Trabalho iniciado" --open
+python install.py --agent all --dry-run
 ```
 
-Atualize o mesmo arquivo sem reabrir a janela:
+No Codex, também é possível pedir:
+
+> Use $skill-installer para instalar https://github.com/EvandroSilvaPinto/progress-bubble/tree/main/skills/progress-bubble
+
+Para instalar manualmente, copie a pasta inteira `skills/progress-bubble` para o destino do seu agente. `agents/openai.yaml` contém metadados opcionais do Codex.
+
+Para atualizar uma instalação existente, faça backup e mova a pasta anterior antes de reinstalar. Se já usa `~/.codex/skills/` no Codex, atualize essa cópia em vez de criar outra. Evite duplicar instalações pessoais e de projeto.
+
+Em macOS/Linux, use `python3` se necessário. Os caminhos do Antigravity seguem a documentação atual; versões antigas podem usar caminhos legados. No Antigravity CLI, `/skills reload` recarrega as skills.
+
+</details>
+
+## 🔄 Do pedido à entrega
+
+**1. Instale e faça seu pedido.** A skill orienta o agente a aplicá-la em **toda interação**, sem invocação explícita. A bolinha e o HTML são criados quando a tarefa for estimada em mais de **30 segundos**, ou ultrapassar esse tempo durante a execução. Pedidos rápidos passam apenas pela verificação inicial.
+
+**2. Continue o seu dia.** A bolinha mantém o percentual à vista. Clique para expandir o cartão; arraste para mudar de posição.
+
+**3. Confira o resultado.** Ao concluir e verificar a entrega, o agente marca **100%**. A bolinha fica disponível até você fechá-la com **×** ou iniciar outra interação no mesmo chat. Nesse momento, o agente fecha o acompanhamento concluído anterior e preserva o HTML. Fechar a janela não cancela o trabalho.
+
+> **Progresso estimado, sem falsa precisão.** Quem atualiza o andamento é o agente. O limite de 30 segundos é uma instrução de uso, não um cronômetro que intercepta todas as tarefas. A descrição solicita uso automático, e o Codex permite invocação implícita. A seleção efetiva depende de o agente carregar e seguir a skill; a instalação não cria um serviço em segundo plano nem força o modelo a executá-la. Se ela não aparecer, recarregue as skills ou inicie uma nova sessão.
+
+Para reforçar o uso nas instruções permanentes do seu agente, adicione:
+
+> Aplique a skill progress-bubble no início de toda interação, sem invocação explícita. Feche acompanhamentos concluídos deste chat e crie progresso para demandas estimadas acima de 30 segundos ou que ultrapassem esse tempo.
+
+Use `AGENTS.md` no Codex, `CLAUDE.md` no Claude Code ou as regras do Antigravity, conforme sua configuração.
+
+## 🎨 Do seu jeito
+
+Clique em **Cores** para abrir cinco bolinhas centralizadas acima do acompanhamento. Passe o mouse para ver o tooltip e clique para escolher a cor:
+
+| Cor | O que muda |
+| --- | --- |
+| **Fundo** | Cartão e bolinha |
+| **Texto** | Títulos, percentual e mensagens |
+| **Progresso** | Anel e barra |
+| **Detalhes** | Links e tempo restante |
+| **Estados** | Conclusão, falha e espera |
+
+A escolha é aplicada e salva imediatamente para os próximos acompanhamentos. Os estados também usam símbolos e texto. A logo verde mantém a identidade do projeto.
+
+**Tempo restante discreto:** veja algo como “Faltam cerca de 3 min”, sem horário exato de término. A estimativa é informada pelo agente e pode ser revista durante a execução.
+
+**Volte ao chat:** quando a origem estiver disponível, **Abrir conversa** leva à conversa da demanda. Caso contrário, **Abrir detalhes** abre o HTML. A janela flutuante permanece fora da barra de tarefas e do Alt+Tab.
+
+## 🧪 Experimente antes de usar com o agente
+
+Na pasta deste repositório, abra uma demonstração:
 
 ```powershell
-python skills/acompanhar-demandas-longas/scripts/status.py --output outputs/demo.html --title "Preparando relatório" --percent 65 --message "Revisando o conteúdo"
+python skills/progress-bubble/scripts/status.py --output outputs/demo.html --title "Preparando relatório" --percent 35 --message "Organizando o conteúdo" --eta-minutes 3 --open
 ```
 
-Finalize:
+Atualize a mesma demonstração:
 
 ```powershell
-python skills/acompanhar-demandas-longas/scripts/status.py --output outputs/demo.html --title "Preparando relatório" --percent 100 --status "Concluído" --message "Relatório entregue e verificado"
+python skills/progress-bubble/scripts/status.py --output outputs/demo.html --title "Preparando relatório" --percent 100 --status "Concluído" --message "Relatório entregue e verificado"
 ```
 
-Omita `--open` para gerar apenas HTML/JSON. Abra o HTML no navegador; enquanto a demanda estiver ativa ele recarrega a cada 20 segundos. Visualizadores incorporados podem exigir recarga manual.
+Sem `--open`, o comando gera apenas o HTML e o JSON. Abra o HTML no navegador para acompanhar.
 
-Estados aceitos: `Em andamento`, `Aguardando informação`, `Concluído`, `Interrompido`, `Falha`. Somente `Concluído` aceita 100%. Em falha, mantenha o percentual alcançado. O horário usa o fuso local do computador.
+<details>
+<summary><strong>Requisitos, estados e frequência de atualização</strong></summary>
 
-## Privacidade e limitações
+- **HTML/JSON:** Python 3.10+ e navegador para visualizar a página.
+- **Bolinha:** Windows nativo, sessão gráfica, Tkinter e `pythonw.exe`. `python -m tkinter` abre uma janela de teste.
+- **Agente:** suporte a skills e permissão para gravar arquivos e executar Python. A instalação não altera permissões nem instala Python.
+- **Atualizações:** o agente busca salvar avanços aproximadamente a cada 30 segundos; a bolinha lê os dados a cada 0,5 segundo e o HTML ativo recarrega a cada 1 segundo. A contagem do tempo restante se atualiza na interface; o percentual depende de avanços salvos pelo agente.
+- **Chamadas longas:** ferramentas bloqueantes podem impedir atualizações intermediárias. Visualizadores de HTML incorporados podem exigir recarga manual.
+- **Estados:** `Em andamento`, `Aguardando informação`, `Concluído`, `Interrompido` e `Falha`. Somente `Concluído` aceita 100%; em falha, preserve o percentual alcançado.
+- **Personalização:** altere o limite no `SKILL.md` e na descrição de `agents/openai.yaml`. Não há informação de última atualização na interface.
 
-Os scripts gravam os dados no caminho escolhido. Não enviam telemetria nem abrem portas. O botão de detalhes abre o HTML no navegador padrão. Evite colocar credenciais ou informações sensíveis no título e na mensagem e não publique arquivos de acompanhamento reais.
+</details>
 
-Cada demanda deve usar um nome de arquivo diferente. Uma segunda abertura para o mesmo JSON não duplica a janela. Fechar a bolinha não cancela a demanda. Não há inicialização automática com o Windows nem execução de trabalho após o encerramento do agente. Textos extensos aparecem resumidos no cartão; o HTML preserva o conteúdo completo.
+<details>
+<summary><strong>Privacidade, execução remota e solução de problemas</strong></summary>
 
-Esta integração com Claude é para **Claude Code local**, não uma extensão do chat web Claude ou uma instalação sincronizada no Cowork. Em WSL, contêineres e agentes remotos, o HTML é a alternativa; rodar o script num ambiente remoto não cria uma janela no seu desktop. As permissões de ferramentas de cada agente continuam valendo.
+Os dados ficam nos arquivos do caminho escolhido. O botão de detalhes abre o HTML no navegador padrão; quando disponível, o link da conversa abre o aplicativo ou site de origem. Evite colocar credenciais ou informações sensíveis no título e na mensagem; não publique acompanhamentos reais.
 
-Se a bolinha não aparecer, confirme os requisitos e execute `python skills/acompanhar-demandas-longas/scripts/bubble.py outputs/demo.json` para ver o erro no terminal. Políticas ou permissões do ambiente podem impedir a janela.
+Cada demanda deve usar um arquivo diferente. Uma nova abertura para o mesmo JSON não duplica a janela. Não há inicialização automática com o Windows nem execução de trabalho após o encerramento do agente. Textos extensos são resumidos no cartão e preservados no HTML.
 
-## Desenvolvimento
+Em WSL, contêineres e agentes remotos, use o HTML. Executar um script remoto não abre uma janela no desktop local. As permissões e políticas do seu ambiente continuam valendo.
+
+Se a bolinha não aparecer, confirme os requisitos e execute no terminal para ver o erro:
+
+```powershell
+python skills/progress-bubble/scripts/bubble.py outputs/demo.json
+```
+
+Os scripts são resolvidos a partir da pasta da skill instalada, sem caminhos pessoais fixos. No Claude Code, `${CLAUDE_SKILL_DIR}` também pode identificar essa pasta. Use `python`, `python3` ou `py -3` conforme o interpretador disponível.
+
+</details>
+
+## 🛠️ Feito para compartilhar e evoluir
+
+Os testes cobrem instalação nos três destinos, execução após mover a skill, preservação de arquivos existentes, caracteres especiais, estados e conclusão. O CI roda em **Windows e Linux**, com **Python 3.10 e 3.13**.
 
 ```powershell
 python -m unittest discover -s tests -v
 ```
 
-Os testes cobrem o instalador por agente, instalação conjunta no projeto, execução da skill instalada em outro caminho, preservação de instalações existentes, interface de linha de comando, caracteres especiais, estados e conclusão. O CI executa em Windows/Linux com Python 3.10/3.13.
+**O que foi validado:** instalador, scripts e caminhos documentados. A janela foi inspecionada manualmente no Windows com Python 3.13. A seleção automática ainda precisa ser conferida numa sessão de cada agente.
 
-**Limite da validação:** os caminhos de descoberta e as invocações seguem as documentações oficiais. Os testes verificam os arquivos instalados e os scripts; não comprovam que cada modelo selecionará a skill automaticamente. A janela foi inspecionada manualmente em Windows com Python 3.13. A seleção automática deve ser conferida numa sessão de cada agente; a invocação explícita é a forma de teste inicial.
+Encontrou um problema ou tem uma ideia? [Abra uma issue](https://github.com/EvandroSilvaPinto/progress-bubble/issues). Pull requests são bem-vindos. Informe sistema, versão do Python, comando e resultado esperado, sem anexar dados privados.
 
-Contribuições por issues e pull requests são bem-vindas. Para bugs, informe sistema operacional, versão do Python, comando utilizado e resultado esperado, sem anexar dados privados.
+Se o projeto ajudou você, uma **⭐ no repositório** ajuda outras pessoas a encontrá-lo.
 
-## Licença
+---
 
-[MIT](LICENSE). Projeto independente, sem afiliação oficial com OpenAI, Anthropic ou Google.
+**Licença [MIT](LICENSE)** · Projeto independente, sem afiliação oficial com OpenAI, Anthropic ou Google.
+
+Referências de instalação: [Codex](https://learn.chatgpt.com/docs/build-skills) · [Claude Code](https://code.claude.com/docs/en/skills) · [Antigravity](https://antigravity.google/docs/skills). Caminhos conferidos em 13/11/2026.

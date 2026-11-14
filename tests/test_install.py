@@ -23,10 +23,10 @@ class InstallTests(unittest.TestCase):
             result = subprocess.run(cmd,env=env,capture_output=True)
             self.assertEqual(result.returncode,0,result.stderr)
             for relative in ('.agents/skills','.claude/skills','.gemini/config/skills'):
-                skill = home/relative/'acompanhar-demandas-longas'
+                skill = home/relative/'progress-bubble'
                 self.assertTrue((skill/'SKILL.md').is_file())
                 self.assertEqual((skill/'scripts/status.py').read_bytes(),
-                                 (ROOT/'skills/acompanhar-demandas-longas/scripts/status.py').read_bytes())
+                                 (ROOT/'skills/progress-bubble/scripts/status.py').read_bytes())
 
     def test_global_paths_follow_each_agent(self):
         self.assertTrue(SCRIPT.is_file(), 'Falta o instalador multiagente')
@@ -51,7 +51,7 @@ class InstallTests(unittest.TestCase):
             result = subprocess.run(cmd,capture_output=True)
             self.assertEqual(result.returncode,0,result.stderr)
             for folder in ('.agents/skills','.claude/skills'):
-                skill = project/folder/'acompanhar-demandas-longas'
+                skill = project/folder/'progress-bubble'
                 script = skill/'scripts/status.py'
                 out = project/folder/'demo.html'
                 run = subprocess.run([sys.executable,str(script),'--output',str(out),

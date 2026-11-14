@@ -1,0 +1,8 @@
+interface:
+  display_name: "Progress Bubble"
+  short_description: "Acompanhamento automático em todas as interações"
+  icon_small: "./assets/logo.png"
+  icon_large: "./assets/logo.png"
+
+policy:
+  allow_implicit_invocation: true
