@@ -287,7 +287,7 @@ Scripts are resolved relative to the installed skill folder, without fixed perso
 
 ## 🛠️ Built to share and improve
 
-The mobile branch includes an independent security review and regression checks for session replay after cleanup, completion/cancellation races, delayed local writes, lost responses, malformed transports and switching private links in one tab. The API and viewer are deployed together; desktop-only usage remains local. The hosted deployment was verified on Workers Free ($0), including live isolated-session and revocation checks. Physical phone-camera scanning remains a device acceptance check.
+The mobile branch includes an independent security review and regression checks for session replay after cleanup, completion/cancellation races, delayed local writes, lost responses, malformed transports and switching private links in one tab. The API and viewer are deployed together; desktop-only usage remains local. The hosted deployment was verified on Workers Free ($0), including live isolated-session and revocation checks. Local validation passes 70 Python tests and 20 Node tests. Physical phone-camera scanning remains a device acceptance check.
 
 
 Every project change must include a README update in the same delivery, as recorded in `AGENTS.md`. The optional GIF generator, `tools/render_demo.py`, uses Pillow only to create the image; the skill itself has no pip dependencies.
