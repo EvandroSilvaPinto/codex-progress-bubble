@@ -38,7 +38,7 @@ Asked your agent to work on something while you focus elsewhere? **Progress Bubb
 
 ## 📱 Follow a task on your phone
 
-Open **Mobile** in the desktop progress card, confirm sharing, then scan the QR code with another device. The QR is generated in your browser: no external QR service receives the link. The viewer adapts to your screen and detects Portuguese or English. Its footer omits the explanatory sentence about estimated progress.
+Open **Mobile** in the desktop progress card, confirm sharing, then scan the QR code shown **inside the same card**. The QR replaces the other card information without increasing the card size. No browser opens on the computer. **Back** returns to progress, and **Copy link** copies the read-only URL. The desktop QR is generated locally with a bundled encoder; no extra pip package, Node runtime or QR service is required. The web viewer also generates its QR locally. The viewer adapts to your screen and detects Portuguese or English. Its footer omits the explanatory sentence about estimated progress.
 
 **Local by default.** Sharing is opt-in for each task. The hosted viewer uses Cloudflare Workers Free and D1 Free; end users need no account. Anyone holding a private link can read that task until it expires, so treat the link and QR as private.
 
@@ -287,12 +287,12 @@ Scripts are resolved relative to the installed skill folder, without fixed perso
 
 ## 🛠️ Built to share and improve
 
-The mobile branch includes an independent security review and regression checks for session replay after cleanup, completion/cancellation races, delayed local writes, lost responses, malformed transports and switching private links in one tab. The API and viewer are deployed together; desktop-only usage remains local. The hosted deployment was verified on Workers Free ($0), including live isolated-session and revocation checks. Local validation passes 70 Python tests and 20 Node tests. Physical phone-camera scanning remains a device acceptance check.
+The mobile branch includes an independent security review and regression checks for session replay after cleanup, completion/cancellation races, delayed local writes, lost responses, malformed transports and switching private links in one tab. The API and viewer are deployed together; desktop-only usage remains local. The hosted deployment was verified on Workers Free ($0), including live isolated-session and revocation checks. Local validation passes 75 Python tests and 21 Node tests. Physical phone-camera scanning remains a device acceptance check.
 
 
 Every project change must include a README update in the same delivery, as recorded in `AGENTS.md`. The optional GIF generator, `tools/render_demo.py`, uses Pillow only to create the image; the skill itself has no pip dependencies.
 
-Tests cover installation for all three agents, relocated installations, existing-file protection, backups and updates, special characters, statuses, completion, colors, sizes, language detection, rendering and parallel placement. CI runs Python checks on **Windows and Linux**, with **Python 3.10 and 3.13**, plus the API/viewer/QR tests on **Node 24**.
+Tests cover installation for all three agents, relocated installations, existing-file protection, backups and updates, special characters, statuses, completion, colors, sizes, language detection, rendering and parallel placement. CI runs Python checks on **Windows and Linux**, with **Python 3.10 and 3.13**, plus the API/viewer/QR tests on **Node 24** with Python for independent desktop QR decoding.
 
 ```powershell
 python -m unittest discover -s tests -v
@@ -306,6 +306,8 @@ If this project helps you, a **⭐ on the repository** helps others find it.
 
 ---
 
-**[MIT License](LICENSE)** · Independent project, not officially affiliated with OpenAI, Anthropic or Google.
+**[MIT License](LICENSE)** · Bundled QR encoders retain their [Python BSD](skills/progress-bubble/scripts/qrcode/LICENSE) and [JavaScript MIT](web/public/vendor/LICENSE-qrcode.txt) licenses.
+
+Independent project, not officially affiliated with OpenAI, Anthropic or Google.
 
 Installation references: [Codex](https://learn.chatgpt.com/docs/build-skills) · [Claude Code](https://code.claude.com/docs/en/skills) · [Antigravity](https://antigravity.google/docs/skills). Paths checked on November 13, 2026.

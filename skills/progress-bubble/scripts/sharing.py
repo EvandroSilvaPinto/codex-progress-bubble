@@ -5,7 +5,7 @@ from pathlib import Path
 import queue
 import threading
 from tkinter import messagebox
-import webbrowser
+from native_qr import show_qr
 from i18n import t
 from web_client import load_secret,secret_path,sync_task,WebError
 
@@ -19,10 +19,6 @@ def service_url():
         return None
 
 
-def open_reader(url):
-    webbrowser.open(url.replace('/#','/?qr=1#',1))
-
-
 def share_task(app):
     if getattr(app,'sharing_in_flight',False):
         return
@@ -31,7 +27,7 @@ def share_task(app):
     except WebError:
         record=None
     if record and record.get('created') and not record.get('revocation_pending'):
-        open_reader(record['endpoint']+'/#'+record['id']+'.'+record['read_token'])
+        show_qr(app,record['endpoint']+'/#'+record['id']+'.'+record['read_token'])
         return
     endpoint=service_url()
     if not endpoint:
@@ -53,7 +49,7 @@ def share_task(app):
             return
         app.sharing_in_flight=False
         if info and info.get('url') and not info.get('error'):
-            open_reader(info['url'])
+            show_qr(app,info['url'])
         else:
             messagebox.showwarning(t('Compartilhar acompanhamento'),t('Não foi possível sincronizar. O acompanhamento local continua disponível.'),parent=app.root)
     threading.Thread(target=execute,daemon=True).start()

@@ -1,0 +1,1 @@
+Vendored unmodified qrcode 8.2 Python package from PyPI. BSD license in LICENSE. Only the matrix encoder is used; optional image backends are not invoked. Wheel SHA-256: 16e64e0716c14960108e85d853062c9e8bba5ca8252c0b4d0231b9df4060ff4f. Source: https://pypi.org/project/qrcode/8.2/

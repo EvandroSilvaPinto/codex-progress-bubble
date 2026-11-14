@@ -5,6 +5,9 @@ import locale
 import os
 
 EN = {
+    'Voltar':'Back',
+    'Copiar link':'Copy link',
+
     'Celular':'Mobile', 'Acompanhar em outro dispositivo':'Follow on another device',
     'Compartilhar acompanhamento':'Share progress',
     'Enviar somente título, mensagem e progresso para gerar um link temporário? Quem tiver o link poderá visualizar esta demanda.':

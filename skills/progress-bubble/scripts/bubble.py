@@ -18,6 +18,7 @@ from placement import PositionSlot, initial_position
 from progress import displayed_progress
 from window_style import configure_window
 from sharing import share_task
+from native_qr import draw_qr,hide_qr,copy_qr
 
 TRANSPARENT = '#010203'
 
@@ -27,6 +28,7 @@ class Bubble:
         self.state = state
         self.data = {}
         self.expanded = False
+        self.mobile_url = None
         self.down = None
         self.moved = False
         self.theme = load_colors()
@@ -77,8 +79,10 @@ class Bubble:
         self.canvas.tag_bind('reset-colors', '<ButtonRelease-1>', lambda e: self.reset_theme())
         self.canvas.tag_bind('sizes','<ButtonRelease-1>',lambda e:show_size_menu(self,e))
         self.canvas.tag_bind('mobile','<ButtonRelease-1>',lambda e:share_task(self))
+        self.canvas.tag_bind('qr-back','<ButtonRelease-1>',lambda e:hide_qr(self))
+        self.canvas.tag_bind('qr-copy','<ButtonRelease-1>',lambda e:copy_qr(self))
         self.canvas.bind('<Button-3>',lambda e:show_size_menu(self,e))
-        for tag in ('bubble', 'close', 'report','colors','reset-colors','sizes','mobile'):
+        for tag in ('bubble', 'close', 'report','colors','reset-colors','sizes','mobile','qr-back','qr-copy'):
             self.canvas.tag_bind(tag, '<Enter>', lambda e: self.canvas.configure(cursor='hand2'))
             self.canvas.tag_bind(tag, '<Leave>', lambda e: self.canvas.configure(cursor=''))
         self.root.bind('<Escape>', lambda event: self.root.destroy())
@@ -110,7 +114,9 @@ class Bubble:
         t = self.theme
         color = t[{'Concluído':'complete','Falha':'error',
                    'Interrompido':'waiting','Aguardando informação':'waiting'}.get(status,'ongoing')]
-        if self.expanded:
+        if self.expanded and getattr(self,'mobile_url',None):
+            draw_qr(self)
+        elif self.expanded:
             self.rounded(5,8,355,270,24,'#080d17','card')
             self.rounded(1,1,351,261,22,t['background'],'card',t['border'])
             self.text(23,20,'ACOMPANHAMENTO',8,t['muted'],True)
@@ -163,7 +169,9 @@ class Bubble:
     def close_card(self):
         self.down = None
         self.expanded = False
-        if self.colors_open:
+        if getattr(self,'mobile_url',None):
+            self.mobile_url=None;self.resize()
+        elif self.colors_open:
             self.set_color_panel(False)
         else:
             self.draw()
