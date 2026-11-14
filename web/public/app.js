@@ -10,7 +10,7 @@ const words=pt?{
   unavailable:'Serviço temporariamente indisponível. Tentaremos novamente.',estimated:'progresso estimado',
   qr:'Mostrar QR code',copy:'Copiar link privado',copied:'Link privado copiado.',copyFailed:'Não foi possível copiar o link.',
   share:'Continue em outro dispositivo',shareHelp:'Escaneie com o celular. Quem tiver o link poderá visualizar esta demanda até ele expirar.',
-  close:'Fechar',notice:'Link privado por demanda · sem histórico permanente',footer:'O progresso é uma estimativa. Somente a entrega confirmada chega a 100%.',
+  close:'Fechar',notice:'Link privado por demanda · sem histórico permanente',
   until:'Disponível até',states:{'Em andamento':'Em andamento','Concluído':'Concluído','Falha':'Falha','Interrompido':'Interrompido','Aguardando informação':'Aguardando informação'}
 }:{cloud:'Cloud tracking',eyebrow:'YOUR TASK, IN VIEW',empty:'Open your private task link',
   help:'No account needed. Each link opens just one task.',loading:'Connecting to your task…',synced:'Connected to your task',stale:'No recent updates from the agent. Showing the last received progress.',
@@ -18,13 +18,13 @@ const words=pt?{
   unavailable:'Temporarily unavailable. We will retry.',estimated:'estimated progress',qr:'Show QR code',copy:'Copy private link',
   copied:'Private link copied.',copyFailed:'Could not copy the link.',share:'Continue on another device',
   shareHelp:'Scan with your phone. Anyone with the link can view this task until it expires.',close:'Close',
-  notice:'Private session links · no permanent task history',footer:'Progress is an estimate. Only confirmed delivery reaches 100%.',
+  notice:'Private session links · no permanent task history',
   until:'Available until',states:{'Em andamento':'In progress','Concluído':'Completed','Falha':'Failed','Interrompido':'Stopped','Aguardando informação':'Waiting for information'}};
 const $=id=>document.getElementById(id);
 document.documentElement.lang=lang;
 for(const [id,value] of Object.entries({cloud:words.cloud,eyebrow:words.eyebrow,title:words.empty,connection:words.help,
   estimated:words.estimated,'qr-button':words.qr,copy:words.copy,'share-title':words.share,'share-help':words.shareHelp,
-  'close-qr':words.close,notice:words.notice,footer:words.footer})) $(id).textContent=value;
+  'close-qr':words.close,notice:words.notice})) $(id).textContent=value;
 $('bar').setAttribute('aria-label',words.estimated);
 $('qr').setAttribute('aria-label',pt?'QR code do link privado desta demanda':'QR code for this private task link');
 let link=null,snapshot,stop=()=>{},autoQR=false;

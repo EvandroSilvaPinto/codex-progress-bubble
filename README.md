@@ -38,7 +38,7 @@ Asked your agent to work on something while you focus elsewhere? **Progress Bubb
 
 ## 📱 Follow a task on your phone
 
-Open **Mobile** in the desktop progress card, confirm sharing, then scan the QR code with another device. The QR is generated in your browser: no external QR service receives the link. The viewer adapts to your screen and detects Portuguese or English.
+Open **Mobile** in the desktop progress card, confirm sharing, then scan the QR code with another device. The QR is generated in your browser: no external QR service receives the link. The viewer adapts to your screen and detects Portuguese or English. Its footer omits the explanatory sentence about estimated progress.
 
 **Local by default.** Sharing is opt-in for each task. The hosted viewer uses Cloudflare Workers Free and D1 Free; end users need no account. Anyone holding a private link can read that task until it expires, so treat the link and QR as private.
 
