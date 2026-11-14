@@ -1,0 +1,15 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "progress-bubble-mobile",
+  "main": "api/worker.js",
+  "compatibility_date": "2026-11-14",
+  "workers_dev": true,
+  "assets": {"directory": "./web/public", "binding": "ASSETS", "run_worker_first": ["/api/*"]},
+  "d1_databases": [{"binding": "DB", "database_name": "progress-bubble-mobile", "database_id": "307854fd-89e8-44ce-a122-770b91c2ccf4", "migrations_dir": "api/migrations"}],
+  "ratelimits": [
+    {"name": "CREATE_LIMITER", "namespace_id": "329681001", "simple": {"limit": 5, "period": 60}},
+    {"name": "REQUEST_LIMITER", "namespace_id": "329681002", "simple": {"limit": 120, "period": 60}}
+  ],
+  "triggers": {"crons": ["0 * * * *"]},
+  "observability": {"enabled": false}
+}

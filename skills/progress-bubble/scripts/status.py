@@ -4,6 +4,8 @@ import html
 import json
 import os
 import math
+import re
+import uuid
 from pathlib import Path
 import subprocess
 import sys
@@ -13,12 +15,23 @@ from navigation import conversation_url
 from colors import load_colors, css
 from i18n import t, system_language
 from progress import displayed_progress, visual_state, progress_script
+from web_client import sync_task, stop_sharing,task_lock,secret_path
 
 
 def save(path, content):
     temporary = path.with_suffix(path.suffix + '.tmp')
     temporary.write_text(content, encoding='utf-8')
     os.replace(temporary, path)
+
+
+def save_delivery(target,data,page,expected=None):
+    state=target.with_suffix('.json')
+    lock=secret_path(state).with_name(secret_path(state).name+'.delivery.json')
+    with task_lock(lock,wait=True):
+        if expected and json.loads(state.read_text(encoding='utf-8')).get('delivery_id')!=expected:
+            return False
+        save(target,page);save(state,json.dumps(data,ensure_ascii=False))
+        return True
 
 
 def main():
@@ -35,7 +48,23 @@ def main():
     parser.add_argument('--dismiss-completed', action='store_true')
     parser.add_argument('--open', action='store_true')
     parser.add_argument('--edit-colors', action='store_true', help='Open the native color editor with the bubble')
+    parser.add_argument('--web-url', help='Opt this task into private sharing at an HTTPS service origin')
+    parser.add_argument('--stop-sharing', action='store_true', help='Revoke this task sharing link')
     args = parser.parse_args()
+    if args.stop_sharing:
+        info=stop_sharing(args.output.resolve().with_suffix('.json'))
+        if info.get('error'):
+            parser.exit(1,info['error']+'\n')
+        state=args.output.resolve().with_suffix('.json')
+        if state.exists():
+            data=json.loads(state.read_text(encoding='utf-8'))
+            data.pop('web_url',None);data.pop('web_error',None)
+            save(state,json.dumps(data,ensure_ascii=False))
+        target=args.output.resolve()
+        if target.exists():
+            save(target,re.sub(r'<p><a id="web-sharing".*?</a></p>','',target.read_text(encoding='utf-8')))
+        print('Sharing revoked.')
+        return
     if args.dismiss_completed:
         state = args.output.resolve().with_suffix('.json')
         if state.exists():
@@ -81,7 +110,7 @@ def main():
             except (OSError,ValueError):
                 pass
     language = system_language()
-    data = dict(title=args.title, percent=args.percent, status=args.status,language=language,
+    data = dict(delivery_id=uuid.uuid4().hex,title=args.title, percent=args.percent, status=args.status,language=language,
                 message=args.message, updated=now, html=str(target), eta_at=eta_at,
                 conversation_url=origin_url,conversation_app=str(app.resolve()) if app else previous.get('conversation_app'))
     data.update(visual_state(previous,args.percent,args.status,eta_at,moment))
@@ -119,9 +148,19 @@ refreshEta();setInterval(refreshEta,1000);
 {progress_script(data)}
 </script>
 </main></body></html>'''
-    save(target, page)
     state = target.with_suffix('.json')
-    save(state, json.dumps(data, ensure_ascii=False))
+    save_delivery(target,data,page)
+    shared=sync_task(data,state,args.web_url,bool(args.web_url))
+    if shared:
+        data['web_url'],data['web_error']=shared.get('url'),shared.get('error')
+        if data['web_url']:
+            qr_url=html.escape(data['web_url'].replace('/#','/?qr=1#',1),quote=True)
+            share_link='<p><a id="web-sharing" href="'+qr_url+'">'+html.escape(t('Acompanhar em outro dispositivo'))+'</a></p>'
+            page=page.replace('</main>',share_link+'</main>')
+            print('Web: '+data['web_url'])
+        save_delivery(target,data,page,data['delivery_id'])
+        if data['web_error']:
+            print(data['web_error'],file=sys.stderr)
     if (args.open or args.edit_colors) and os.name == 'nt':
         script = Path(__file__).with_name('bubble.py')
         pythonw = Path(sys.executable).with_name('pythonw.exe')

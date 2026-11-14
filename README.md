@@ -36,6 +36,37 @@ Asked your agent to work on something while you focus elsewhere? **Progress Bubb
 
 > **Before installing:** the floating bubble requires **native Windows + Python 3.10 or later with Tkinter**. On macOS, Linux, WSL and environments without a desktop, use the HTML progress page.
 
+## 📱 Follow a task on your phone
+
+Open **Mobile** in the desktop progress card, confirm sharing, then scan the QR code shown **inside the same card**. The QR replaces the other card information without increasing the card size. No browser opens on the computer. **Back** returns to progress, and **Copy link** copies the read-only URL. The desktop QR is generated locally with a bundled encoder; no extra pip package, Node runtime or QR service is required. The web viewer also generates its QR locally. The viewer adapts to your screen and detects Portuguese or English. Its footer omits the explanatory sentence about estimated progress.
+
+**Local by default.** Sharing is opt-in for each task. The hosted viewer uses Cloudflare Workers Free and D1 Free; end users need no account. Anyone holding a private link can read that task until it expires, so treat the link and QR as private.
+
+For a cloud agent or command-line task, explicitly opt in when creating the tracker:
+
+```powershell
+python skills/progress-bubble/scripts/status.py --output outputs/mobile.html --title "Preparing report" --percent 10 --message "Working" --eta-minutes 5 --web-url https://progress-bubble-mobile.dev-evandrosilvapinto.workers.dev
+```
+
+Subsequent updates to the same output automatically sync. The command prints a **read-only** link and adds a mobile link to the local HTML. Windows users can open the bubble with `--open`; cloud agents only need Python and outbound HTTPS. Your computer does not need to expose a port or remain reachable from the phone, but the executing agent must keep sending updates.
+
+To revoke a particular task immediately:
+
+```powershell
+python skills/progress-bubble/scripts/status.py --output outputs/mobile.html --stop-sharing
+```
+
+If revocation cannot reach the service, it remains pending and retries on the next update. Keep the private settings until the retry succeeds; existing links remain valid until revocation reaches the server or their original expiry.
+
+- Links expire after **24 hours maximum**, or **one hour after the first confirmed completion**, whichever comes first. Updates never extend this lifetime.
+- Only title (120 characters), message (280 characters), status, percentage, language and estimate fields are uploaded. Conversation URLs, local paths and app commands are excluded. Keep sensitive information out of titles/messages.
+- Separate random read/write keys prevent the viewer from updating tasks. Keep the publishing machine clock synchronized (new session IDs allow five minutes of clock skew). Writer keys remain in private user configuration under `ProgressBubble/sessions`, outside HTML/JSON deliverables. The API stores only key hashes.
+- No global task list, analytics, external fonts or runtime CDNs. Responses disable caching; reader secrets use the URL fragment and are removed from the visible address after opening.
+- Visible viewers poll every **15 seconds**; progress/time remaining animate locally. Polling pauses in hidden tabs and stops at expiry. Offline views clearly show that they have old data.
+- Expiry/revocation blocks access immediately on the server. Hourly cleanup removes expired rows; Cloudflare D1 Free recovery backups can retain previous data for **seven days**, so expiry is not a promise of immediate physical erasure.
+
+The shared free service is subject to availability and account-wide quotas. It limits creation to 5/minute/IP, API traffic to 120/minute/IP and active sessions to 500. Free-tier exhaustion stops access rather than enabling billing or bypassing authorization. See [deployment and self-hosting](docs/mobile-hosting.md) for isolation, quotas and deployment commands. Set `PROGRESS_BUBBLE_WEB_URL` to use your own service for the desktop button.
+
 ## 🌐 Automatic language detection
 
 The interface detects the system language when it starts:
@@ -238,7 +269,7 @@ python skills/progress-bubble/scripts/status.py --output outputs/demo.html --tit
 <details>
 <summary><strong>Privacy, remote execution and troubleshooting</strong></summary>
 
-Data stays at your chosen file location. Details open in the default browser; chat links open their original app or website. Avoid credentials or sensitive information in titles and messages. Do not publish real tracking files.
+In local mode, data stays at your chosen file location. Optional mobile sharing uploads only the fields described above. Details open in the default browser; chat links open their original app or website. Avoid credentials or sensitive information in titles and messages. Do not publish real tracking files.
 
 Use a different file for each task. Reopening the same JSON does not duplicate its window. The skill does not start with Windows or continue working after the agent stops. Long text is shortened in the card and preserved in HTML.
 
@@ -256,9 +287,12 @@ Scripts are resolved relative to the installed skill folder, without fixed perso
 
 ## 🛠️ Built to share and improve
 
+The mobile branch includes an independent security review and regression checks for session replay after cleanup, completion/cancellation races, delayed local writes, lost responses, malformed transports and switching private links in one tab. The API and viewer are deployed together; desktop-only usage remains local. The hosted deployment was verified on Workers Free ($0), including live isolated-session and revocation checks. Local validation passes 75 Python tests and 21 Node tests. Physical phone-camera scanning remains a device acceptance check.
+
+
 Every project change must include a README update in the same delivery, as recorded in `AGENTS.md`. The optional GIF generator, `tools/render_demo.py`, uses Pillow only to create the image; the skill itself has no pip dependencies.
 
-Tests cover installation for all three agents, relocated installations, existing-file protection, backups and updates, special characters, statuses, completion, colors, sizes, language detection, rendering and parallel placement. CI runs on **Windows and Linux**, with **Python 3.10 and 3.13**.
+Tests cover installation for all three agents, relocated installations, existing-file protection, backups and updates, special characters, statuses, completion, colors, sizes, language detection, rendering and parallel placement. CI runs Python checks on **Windows and Linux**, with **Python 3.10 and 3.13**, plus the API/viewer/QR tests on **Node 24** with Python for independent desktop QR decoding.
 
 ```powershell
 python -m unittest discover -s tests -v
@@ -272,6 +306,8 @@ If this project helps you, a **⭐ on the repository** helps others find it.
 
 ---
 
-**[MIT License](LICENSE)** · Independent project, not officially affiliated with OpenAI, Anthropic or Google.
+**[MIT License](LICENSE)** · Bundled QR encoders retain their [Python BSD](skills/progress-bubble/scripts/qrcode/LICENSE) and [JavaScript MIT](web/public/vendor/LICENSE-qrcode.txt) licenses.
+
+Independent project, not officially affiliated with OpenAI, Anthropic or Google.
 
 Installation references: [Codex](https://learn.chatgpt.com/docs/build-skills) · [Claude Code](https://code.claude.com/docs/en/skills) · [Antigravity](https://antigravity.google/docs/skills). Paths checked on November 13, 2026.
